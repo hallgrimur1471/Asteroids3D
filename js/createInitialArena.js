@@ -2,11 +2,11 @@
 
 function createInitialArena() {
   var ship = new Ship({
-      keyUp: keyCode('S'),
-      keyDown: keyCode('W'),
-      keyLeft: keyCode('A'),
-      keyRight: keyCode('D'),
-      keyShoot: keyCode(' '),
+      keyUp: keyMap.SHIP_UP,
+      keyDown: keyMap.SHIP_DOWN,
+      keyLeft: keyMap.SHIP_LEFT,
+      keyRight: keyMap.SHIP_RIGHT,
+      keyShoot: keyMap.SHIP_SHOOT,
       commandObject: keys
   });
 

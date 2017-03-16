@@ -4,7 +4,6 @@ var main = {
   _frameTime_ms : null,
   _frameTimeDelta_ms : null,
   gameState : 'playing', // todo: initalize this to 'menu'
-  TOGGLE_DEBUG_RENDER: keyCode('T'),
   _doDebugRender : false,
 }
 
@@ -37,7 +36,7 @@ main._iterCore = function(dt) {
     case 'playing':
       // todo: make the following functions:
       //gatherInputs();
-      //update(dt);
+      update(dt);
       //render();
       console.log(this._frameTime_ms);
       console.log(this._frameTimeDelta_ms);
@@ -58,7 +57,7 @@ main._requestNextIteration = function() {
 }
 
 main._debugRender = function() {
-  if (eatKey(this.TOGGLE_DEBUG_RENDER)) this._doDebugRender = !this._doDebugRender;
+  if (eatKey(keyMap.TOGGLE_DEBUG_RENDER)) this._doDebugRender = !this._doDebugRender;
 
   if (!this._doDebugRender) return;
 
