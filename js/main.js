@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var main = {
   _frameTime_ms : null,
@@ -68,7 +68,7 @@ main._debugRender = function() {
 main.init = function() {
   // todo: do some initialization here
   //entityManager.init();
-  //createInitialArena(g_numerOfAsteroids)
+  createInitialArena();
 
   this._requestNextIteration();
 }
