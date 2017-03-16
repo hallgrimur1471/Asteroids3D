@@ -1,73 +1,119 @@
 'use strict';
 
-var main = {
-  _frameTime_ms : null,
-  _frameTimeDelta_ms : null,
-  gameState : 'playing', // todo: initalize this to 'menu'
-  _doDebugRender : false,
-}
+class GameEngine {
+  constructor() {
+    this.NOMINAL_UPDATE_INTERVAL = 16.666;
+    this.frameTime_ms = null;
+    this.frameTimeDelta_ms = null;
+    this.gameState = 'playing'; // todo: initalize this to 'menu'
+    this.isPaused = false;
+  }
 
-// Perform one iteration of the mainloop
-main.iter = function(frameTime) {
-  this._updateClocks(frameTime);
+  init() {
+    // todo: do some initialization here
+    //entityManager.init();
+    createInitialArena();
 
-  // this is where the "real work" is done.
-  this._iterCore(this._frameTimeDelta_ms);
+    this.requestNextIteration();
+  }
 
-  // Diagnostics, such as showing current timer values etc.
-  this._debugRender();
+  // Perform one iteration of the mainloop
+  iterate(frameTime) {
+    this.updateClocks(frameTime);
 
-  this._requestNextIteration();
-}
+    // this is where the "real work" is done.
+    this.iterationCore(this.frameTimeDelta_ms);
 
-main._updateClocks = function(frameTime) {
+    // Diagnostics, such as showing current timer values etc.
+    this.debugRender();
 
-  if (this._frameTime_ms === null) this._frameTime_ms = frameTime;
+    this.requestNextIteration();
+  }
 
-  this._frameTimeDelta_ms = frameTime - this._frameTime_ms;
-  this._frameTime_ms = frameTime;
-}
+  updateClocks(frameTime) {
+    if (this.frameTime_ms === null) this.frameTime_ms = frameTime;
 
-main._iterCore = function(dt) {
-  switch (main.gameState) {
-    case 'menu':
-      //...
-      break;
-    case 'playing':
-      // todo: make the following functions:
-      //gatherInputs();
-      update(dt);
-      //render();
-      console.log(this._frameTime_ms);
-      console.log(this._frameTimeDelta_ms);
-      break;
-    case 'winscreen':
-      //...
-      break;
+    this.frameTimeDelta_ms = frameTime - this.frameTime_ms;
+    this.frameTime_ms = frameTime;
+  }
+
+  iterationCore(dt) {
+    switch (this.gameState) {
+      case 'menu':
+        //...
+        break;
+      case 'playing':
+        this.gatherInputs();
+        this.update(dt);
+        this.render();
+
+        console.log(this.frameTime_ms);
+        console.log(this.frameTimeDelta_ms);
+        break;
+      case 'winscreen':
+        //...
+        break;
+    }
+  }
+
+  requestNextIteration() {
+    window.requestAnimationFrame(iterFrame);
+  }
+
+  gatherInputs() {
+    // Nothing to do here for now.
+    // The event handlers do everything we need for now. 
+  }
+
+  update(dt) {
+    if (shouldSkipUpdate()) return;
+
+    // Warn about very large dt values, they may lead to error
+    if (dt > 200) {
+      console.log('big dt =', dt, ': CLAMPING TO NOMINAL');
+      dt = NOMINAL_UPDATE_INTERVAL;
+    }
+
+    // If using variable time, divide the actual delta by the 'nominal' rate,
+    // giving us a conveniently scaled 'du' to work with.
+    var du = (dt / NOMINAL_UPDATE_INTERVAL);
+
+    console.log('update simulation');
+    //updateSimulation(du);
+  }
+
+  shouldSkipUpdate() {
+    if (eatKey(keyMap.PAUSE)) {
+      this.isPaused = !this.isPaused;
+    }
+    return this.isPaused && !eatKey(keyMap.STEP);
+  }
+
+  render() {
+
+  }
+
+  debugRender() {
+    if (eatKey(keyMap.TOGGLE_DEBUG_RENDER)) {
+      this._doDebugRender = !this._doDebugRender;
+    }
+
+    if (!this._doDebugRender) return;
+
+    // todo: implement debug rendering, maybe render frameTime_ms
   }
 }
 
-// This needs to be a "global" function, for the "window" APIs to callback to
-function mainIterFrame(frameTime) {
-  main.iter(frameTime);
+// gameEngine and iterFrame need to be 'global', for the "window" APIs to callback to
+let gameEngine;
+function iterFrame(frameTime) {
+  gameEngine.iterate(frameTime);
 }
 
-main._requestNextIteration = function() {
-  window.requestAnimationFrame(mainIterFrame)
+function main() {
+  gameEngine = new GameEngine();
+  gameEngine.init();
 }
 
-main._debugRender = function() {
-  if (eatKey(keyMap.TOGGLE_DEBUG_RENDER)) this._doDebugRender = !this._doDebugRender;
-
-  if (!this._doDebugRender) return;
-
-  // todo: implement debug rendering, maybe render frameTime_ms
-}
-
-main.init = function() {
-  // todo: do some initialization here
-  //entityManager.init();
-  createInitialArena();
-
-  this._requestNextIteration();
-}
+// Kick it off
+main();
