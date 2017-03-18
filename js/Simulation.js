@@ -7,6 +7,8 @@ class Simulation {
 
   update(du) {
     console.log('updating simulation');
+    processDiagnostics();
+    entityManager.update(du);
   }
 
   renderSimulation() {
