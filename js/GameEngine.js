@@ -1,7 +1,18 @@
 'use strict';
 
+/* global Keyboard */
+
 class GameEngine {
-  constructor(game) {
+  constructor(game, keyboard) {
+    
+    if(game === undefined) {
+      console.error("game is not defined");
+    }
+    
+    if(keyboard === undefined) {
+      console.error("keyboard is not defined");
+    }
+    this.keyboard = keyboard;
     this.game = game;
     this.frameTime_ms = null;
     this.frameTimeDelta_ms = null;
@@ -10,13 +21,13 @@ class GameEngine {
   }
   
   static get NOMINAL_UPDATE_INTERVAL() {
-    return 16.666; // 1000 / 60
+    return 16.666; // 1000ms / 60fps
   }
 
   startGame() {
     // todo: do some initialization here
     //entityManager.init();
-    this.game.init();
+    //this.game.init();
     //createInitialArena(); // todo: move method to Arena class
 
     this.requestNextIteration();
@@ -62,7 +73,11 @@ class GameEngine {
   }
 
   requestNextIteration() {
-    window.requestAnimationFrame(iterFrame);
+    //window.requestAnimationFrame(this.iterFrame);
+    const self = this;
+    window.requestAnimationFrame(time => {
+      self.iterFrame(time);
+    });
   }
 
   gatherInputs() {
@@ -83,14 +98,14 @@ class GameEngine {
     // giving us a conveniently scaled 'du' to work with.
     var du = (dt / this.NOMINAL_UPDATE_INTERVAL);
 
-    this.simulation.update(du);
+    this.game.update(du);
   }
 
   shouldSkipUpdate() {
-    if (eatKey(keyMap.PAUSE)) {
+    if (this.keyboard.eatKey(Keyboard.KEY_MAP.PAUSE)) {
       this.isPaused = !this.isPaused;
     }
-    return this.isPaused && !eatKey(keyMap.STEP);
+    return this.isPaused && !this.keyboard.eatKey(Keyboard.KEY_MAP.STEP);
   }
 
   render() {
@@ -98,7 +113,7 @@ class GameEngine {
   }
 
   debugRender() {
-    if (eatKey(keyMap.TOGGLE_DEBUG_RENDER)) {
+    if (this.keyboard.eatKey(Keyboard.KEY_MAP.TOGGLE_DEBUG_RENDER)) {
       this._doDebugRender = !this._doDebugRender;
     }
 
@@ -106,9 +121,8 @@ class GameEngine {
 
     // todo: implement debug rendering, maybe render frameTime_ms
   }
-}
-
-// gameEngine and iterFrame need to be 'global', for the "window" APIs to callback to
-function iterFrame(frameTime) {
-  g_gameEngine.iterate(frameTime);
+  
+  iterFrame(frameTime) {
+    this.iterate(frameTime);
+  }
 }

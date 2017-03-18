@@ -1,10 +1,11 @@
 'use strict';
 
-/* global GameEngine, Asteroids */
+/* global GameEngine, Asteroids, Keyboard */
 
 function main() {
-  const game = new Asteroids();
-  const gameEngine = new GameEngine(game);
+  const keyboard = new Keyboard();
+  const game = new Asteroids(keyboard);
+  const gameEngine = new GameEngine(game, keyboard);
   gameEngine.startGame();
 }
 

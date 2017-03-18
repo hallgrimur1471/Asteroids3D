@@ -1,37 +1,41 @@
 'use strict';
 
+/* global EntityManager Keyboard Ship Arena*/
+
 class Asteroids {
-  constructor() {
-    this.entityManager;
-    this.arena;
-  }
-  
-  init() {
+  constructor(keyboard) {
+    if(keyboard === undefined) {
+      console.error("keyboard is not defined");
+    }
+    
+    this.keyboard = keyboard;
+    
     this.entityManager = new EntityManager();
     this.createInitialArena();
   }
   
   createInitialArena() {
-    let ship = new Ship({
-        keyUp: keyMap.SHIP_UP,
-        keyDown: keyMap.SHIP_DOWN,
-        keyLeft: keyMap.SHIP_LEFT,
-        keyRight: keyMap.SHIP_RIGHT,
-        keyShoot: keyMap.SHIP_SHOOT,
-        commandObject: keys
+    const ship = new Ship({
+        keyUp: Keyboard.SHIP_UP,
+        keyDown: Keyboard.SHIP_DOWN,
+        keyLeft: Keyboard.SHIP_LEFT,
+        keyRight: Keyboard.SHIP_RIGHT,
+        keyShoot: Keyboard.SHIP_SHOOT,
+        keyboard: this.keyboard
     });
   
     // Initialize arena
-    this.arena = new Arena(ship);
+    const arena = new Arena(ship);
+    this.arena =  arena;
   
     // Set the newly created arena as the default arena
-    this.entityManager.setDefaultArena(arena);
+    this.entityManager.setDefaultArena(this.arena);
   }
 
   update(du) {
     console.log('updating simulation');
-    processDiagnostics();
-    entityManager.update(du);
+    //processDiagnostics();
+    this.entityManager.update(du);
   }
 
   renderSimulation() {

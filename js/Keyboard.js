@@ -1,61 +1,65 @@
 'use strict';
 class Keyboard {
   static get PAUSE(){ // Togglable pause mode
-    return this.keyMap.PAUSE;
+    return Keyboard.KEY_MAP.PAUSE;
   }
   
   static get STEP(){ // Iterate one step in pause mode
-    return this.keyMap.STEP;
+    return Keyboard.KEY_MAP.STEP;
   }
   
   static get TOGGLE_DEBUG_RENDER(){
-    return this.keyMap.TOGGLE_DEBUG_RENDER;
+    return Keyboard.KEY_MAP.TOGGLE_DEBUG_RENDER;
   }
   
   static get SHIP_UP(){
-    return this.keyMap.SHIP_UP;
+    return Keyboard.KEY_MAP.SHIP_UP;
   }
   
   static get SHIP_DOWN(){
-    return this.keyMap.SHIP_DOWN;
+    return Keyboard.KEY_MAP.SHIP_DOWN;
   }
   
   static get SHIP_LEFT(){
-    return this.keyMap.SHIP_LEFT;
+    return Keyboard.KEY_MAP.SHIP_LEFT;
   }
   
   static get SHIP_RIGHT(){
-    return this.keyMap.SHIP_RIGHT;
+    return Keyboard.KEY_MAP.SHIP_RIGHT;
   }
   
   static get SHIP_SHOOT(){
-    return this.keyMap.SHIP_SHOOT;
+    return Keyboard.KEY_MAP.SHIP_SHOOT;
+  }
+  
+  static get KEY_MAP(){
+    return {
+      PAUSE: Keyboard.keyCode('P'), 
+      STEP: Keyboard.keyCode('O'),
+    
+      TOGGLE_DEBUG_RENDER: Keyboard.keyCode('T'),
+    
+      SHIP_UP: Keyboard.keyCode('S'),
+      SHIP_DOWN: Keyboard.keyCode('W'),
+      SHIP_LEFT: Keyboard.keyCode('A'),
+      SHIP_RIGHT: Keyboard.keyCode('D'),
+      SHIP_SHOOT: Keyboard.keyCode(' '),
+    };
   }
   
   constructor(){
-    this.keyMap = {
-      PAUSE: this.keyCode('P'), 
-      STEP: this.keyCode('O'),
-    
-      TOGGLE_DEBUG_RENDER: this.keyCode('T'),
-    
-      SHIP_UP: this.keyCode('S'),
-      SHIP_DOWN: this.keyCode('W'),
-      SHIP_LEFT: this.keyCode('A'),
-      SHIP_RIGHT: this.keyCode('D'),
-      SHIP_SHOOT: this.keyCode(' '),
-    };
-    this.currentlyPressedKeys = [];  
+    this.currentlyPressedKeys = [];
     this.initListeners();
   }
   
   initListeners(){
+    const self = this;
     function handleKeydown(evt) {
-      this.currentlyPressedKeys[evt.keyCode] = true;
+      self.currentlyPressedKeys[evt.keyCode] = true;
     }
     
     function handleKeyup(evt) {
-      this.currentlyPressedKeys[evt.keyCode] = false;
+      self.currentlyPressedKeys[evt.keyCode] = false;
     }
     window.addEventListener('keydown', handleKeydown);
     window.addEventListener('keyup', handleKeyup);
@@ -72,7 +76,7 @@ class Keyboard {
     return isDown;
   }
   
-  keyCode(keyChar){
+  static keyCode(keyChar){
     return keyChar.charCodeAt(0);
   }
   
