@@ -1,19 +1,23 @@
 'use strict';
 
 class GameEngine {
-  constructor() {
-    this.NOMINAL_UPDATE_INTERVAL = 16.666;
+  constructor(game) {
+    this.game = game;
     this.frameTime_ms = null;
     this.frameTimeDelta_ms = null;
     this.gameState = 'playing'; // todo: initalize this to 'menu'
     this.isPaused = false;
-    this.simulation = new Simulation();
+  }
+  
+  static get NOMINAL_UPDATE_INTERVAL() {
+    return 16.666; // 1000 / 60
   }
 
-  init() {
+  startGame() {
     // todo: do some initialization here
     //entityManager.init();
-    createInitialArena(); // todo: move method to Arena class
+    this.game.init();
+    //createInitialArena(); // todo: move method to Arena class
 
     this.requestNextIteration();
   }
@@ -105,7 +109,6 @@ class GameEngine {
 }
 
 // gameEngine and iterFrame need to be 'global', for the "window" APIs to callback to
-let g_gameEngine;
 function iterFrame(frameTime) {
   g_gameEngine.iterate(frameTime);
 }

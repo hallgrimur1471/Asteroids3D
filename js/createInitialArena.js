@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 function createInitialArena() {
@@ -16,3 +17,4 @@ function createInitialArena() {
   // Set the newly created arena as the default arena
   entityManager.setDefaultArena(arena);
 }
+*/
