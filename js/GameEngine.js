@@ -1,20 +1,24 @@
 'use strict';
 
-    var fovy = 50
-    var aspect = 1
-    var near = 0.2
-    var far = 100
-/* global Keyboard, Utils, gl, mv */
+//var fovy = 50
+//var aspect = 1
+//var near = 0.2
+//var far = 100
+/* global Keyboard, Utils, Camera, gl, mv */
 
 class GameEngine {
-  constructor(game, keyboard) {
+  constructor(game, mouse, keyboard) {
     if(game === undefined) {
       console.error("game is not defined");
     }
     if(keyboard === undefined) {
       console.error("keyboard is not defined");
     }
+    if(mouse === undefined) {
+      console.error("mouse is not defined");
+    }
 
+    this.mouse = mouse;
     this.keyboard = keyboard;
     this.game = game;
     
@@ -105,18 +109,18 @@ class GameEngine {
     // or toggle the audio
   }
   
-  configureCamera(){ 
-    //fovy, aspect, near, far
-  	var proj = perspective( fovy, aspect, near, far );
-  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-  	const eye = vec3(1.0, 0.0, 30);
-  	const at = vec3(0.0, 0.0, 0.0);
-  	const up = vec3(0.0, 1.0, 0.0);
-  	mv = mult( mv, lookAt( eye, at, up ));
-  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
-  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
-  	//mv = mult( mv, translate(-3, -10, -3));
-  }
+//  configureCamera(){ 
+//    //fovy, aspect, near, far
+//  	var proj = perspective( fovy, aspect, near, far );
+//  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+//  	const eye = vec3(1.0, 0.0, 30); // h'er er 30 fasti sem m;tti vera breyta t.d. this.zDist henni m'a svo breya t./.a. skrolla.
+//  	const at = vec3(0.0, 0.0, 0.0);
+//  	const up = vec3(0.0, 1.0, 0.0);
+//  	mv = mult( mv, lookAt( eye, at, up ));
+//  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
+//  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
+//  	//mv = mult( mv, translate(-3, -10, -3));
+//  }
 
   render() {
     // TODO create rendering context
@@ -124,10 +128,6 @@ class GameEngine {
     
 		Utils.mvStack.push(mv);
 		
-		this.configureCamera();
-		
-		//mv = mult( mv, translate(0, 0, 0));
-		//mv = mult( mv, scale4(0.4, 0.4, 0.4));
 		this.game.render();
 		
 		mv=Utils.mvStack.pop();
@@ -144,7 +144,6 @@ class GameEngine {
   }
 
   requestNextIteration() {
-    //window.requestAnimationFrame(this.iterFrame);
     const self = this;
     window.requestAnimationFrame(time => {
       self.iterFrame(time);

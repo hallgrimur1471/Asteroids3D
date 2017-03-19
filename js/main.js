@@ -1,6 +1,6 @@
 'use strict';
 
-/* global GameEngine, Asteroids, Keyboard */
+/* global GameEngine, Asteroids, Keyboard, Utils, initUtils, Mouse */
 
 window.onload = function(){
   main();
@@ -9,14 +9,9 @@ window.onload = function(){
 function main() {
   Utils.configureWebGL();
   initUtils();
-  
-  const canvas = document.getElementById("gl-canvas");
-  canvas.addEventListener("mousedown", EventHandlers.mouseDownHandler);
-	canvas.addEventListener("mouseup", EventHandlers.mouseUpHandler);
-	canvas.addEventListener("mousemove", EventHandlers.mouseMoveHandler);
-	canvas.addEventListener("mousewheel", EventHandlers.mouseWheelHandler); 
+  const mouse = new Mouse();
   const keyboard = new Keyboard();
-  const game = new Asteroids(keyboard);
-  const gameEngine = new GameEngine(game, keyboard);
+  const game = new Asteroids(keyboard, mouse);
+  const gameEngine = new GameEngine(game, mouse, keyboard);
   gameEngine.startGame();
 }

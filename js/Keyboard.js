@@ -1,35 +1,39 @@
 'use strict';
 class Keyboard {
-  static get PAUSE(){ // Togglable pause mode
+  static get PAUSE() { // Togglable pause mode
     return Keyboard.KEY_MAP.PAUSE;
   }
   
-  static get STEP(){ // Iterate one step in pause mode
+  static get STEP() { // Iterate one step in pause mode
     return Keyboard.KEY_MAP.STEP;
   }
   
-  static get TOGGLE_DEBUG_RENDER(){
+  static get TOGGLE_DEBUG_RENDER() {
     return Keyboard.KEY_MAP.TOGGLE_DEBUG_RENDER;
   }
   
-  static get SHIP_UP(){
+  static get SHIP_UP() {
     return Keyboard.KEY_MAP.SHIP_UP;
   }
   
-  static get SHIP_DOWN(){
+  static get SHIP_DOWN() {
     return Keyboard.KEY_MAP.SHIP_DOWN;
   }
   
-  static get SHIP_LEFT(){
+  static get SHIP_LEFT() {
     return Keyboard.KEY_MAP.SHIP_LEFT;
   }
   
-  static get SHIP_RIGHT(){
+  static get SHIP_RIGHT() {
     return Keyboard.KEY_MAP.SHIP_RIGHT;
   }
   
-  static get SHIP_SHOOT(){
+  static get SHIP_SHOOT() {
     return Keyboard.KEY_MAP.SHIP_SHOOT;
+  }
+  
+  static get CHANGE_CAMERA() {
+    return Keyboard.KEY_MAP.CHANGE_CAMERA;
   }
   
   static get KEY_MAP(){
@@ -44,6 +48,8 @@ class Keyboard {
       SHIP_LEFT: Keyboard.keyCode('A'),
       SHIP_RIGHT: Keyboard.keyCode('D'),
       SHIP_SHOOT: Keyboard.keyCode(' '),
+      
+      CHANGE_CAMERA: Keyboard.keyCode('C'),
     };
   }
   

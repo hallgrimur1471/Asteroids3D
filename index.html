@@ -1,5 +1,12 @@
 <html>
 
+<!-- disable page scrolling -->
+<style type="text/css">
+html, body {
+  overflow: hidden;
+}
+</style>
+
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute  vec4 vPosition;
 attribute  vec2 vTexCoord;
@@ -57,9 +64,12 @@ main()
 <script type="text/javascript" src="js/createInitialArena.js"></script>
 
 <script type="text/javascript" src="js/Keyboard.js"></script>
+<script type="text/javascript" src="js/Mouse.js"></script>
 
 <script type="text/javascript" src="js/EntityManager.js"></script>
 <script type="text/javascript" src="js/GameEngine.js"></script>
+
+<script type="text/javascript" src="js/Camera.js"></script>
 <script type="text/javascript" src="js/Asteroids.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
