@@ -1,22 +1,26 @@
 'use strict';
 
-/* global Keyboard */
+    var fovy = 50
+    var aspect = 1
+    var near = 0.2
+    var far = 100
+/* global Keyboard, Utils, gl, mv */
 
 class GameEngine {
   constructor(game, keyboard) {
-    
     if(game === undefined) {
       console.error("game is not defined");
     }
-    
     if(keyboard === undefined) {
       console.error("keyboard is not defined");
     }
+
     this.keyboard = keyboard;
     this.game = game;
+    
     this.frameTime_ms = null;
     this.frameTimeDelta_ms = null;
-    this.gameState = 'playing'; // todo: initalize this to 'menu'
+    this.gameState = 'playing'; // TODO: initalize this to 'menu'
     this.isPaused = false;
   }
   
@@ -25,15 +29,10 @@ class GameEngine {
   }
 
   startGame() {
-    // todo: do some initialization here
-    //entityManager.init();
-    //this.game.init();
-    //createInitialArena(); // todo: move method to Arena class
-
     this.requestNextIteration();
   }
 
-  // Perform one iteration of the mainloop
+  // Perform one iteration of the mainloop and request another one
   iterate(frameTime) {
     this.updateClocks(frameTime);
 
@@ -46,6 +45,7 @@ class GameEngine {
     this.requestNextIteration();
   }
 
+  // update the time and time delta values
   updateClocks(frameTime) {
     if (this.frameTime_ms === null) this.frameTime_ms = frameTime;
 
@@ -59,12 +59,10 @@ class GameEngine {
         //...
         break;
       case 'playing':
+        // console.log("time: ", this.frameTime_ms, "delta: ", this.frameTimeDelta_ms);
         this.gatherInputs();
         this.update(dt);
         this.render();
-
-        console.log(this.frameTime_ms);
-        console.log(this.frameTimeDelta_ms);
         break;
       case 'winscreen':
         //...
@@ -72,31 +70,25 @@ class GameEngine {
     }
   }
 
-  requestNextIteration() {
-    //window.requestAnimationFrame(this.iterFrame);
-    const self = this;
-    window.requestAnimationFrame(time => {
-      self.iterFrame(time);
-    });
-  }
-
   gatherInputs() {
     // Nothing to do here for now.
-    // The event handlers do everything we need for now. 
+    // The Keyboard class has does everything we need for now. 
   }
 
   update(dt) {
     if (this.shouldSkipUpdate()) return;
+    
+    this.processDiagnostics();
 
     // Warn about very large dt values, they may lead to error
     if (dt > 200) {
       console.log('big dt =', dt, ': CLAMPING TO NOMINAL');
-      dt = this.NOMINAL_UPDATE_INTERVAL;
+      dt = GameEngine.NOMINAL_UPDATE_INTERVAL;
     }
 
     // If using variable time, divide the actual delta by the 'nominal' rate,
     // giving us a conveniently scaled 'du' to work with.
-    var du = (dt / this.NOMINAL_UPDATE_INTERVAL);
+    const du = (dt / GameEngine.NOMINAL_UPDATE_INTERVAL);
 
     this.game.update(du);
   }
@@ -107,9 +99,38 @@ class GameEngine {
     }
     return this.isPaused && !this.keyboard.eatKey(Keyboard.KEY_MAP.STEP);
   }
+  
+  processDiagnostics() {
+    // here one can react to diagnostics keypresses
+    // or toggle the audio
+  }
+  
+  configureCamera(){ 
+    //fovy, aspect, near, far
+  	var proj = perspective( fovy, aspect, near, far );
+  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+  	const eye = vec3(1.0, 0.0, 30);
+  	const at = vec3(0.0, 0.0, 0.0);
+  	const up = vec3(0.0, 1.0, 0.0);
+  	mv = mult( mv, lookAt( eye, at, up ));
+  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
+  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
+  	//mv = mult( mv, translate(-3, -10, -3));
+  }
 
   render() {
-    //...
+    // TODO create rendering context
+    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
+    
+		Utils.mvStack.push(mv);
+		
+		this.configureCamera();
+		
+		//mv = mult( mv, translate(0, 0, 0));
+		//mv = mult( mv, scale4(0.4, 0.4, 0.4));
+		this.game.render();
+		
+		mv=Utils.mvStack.pop();
   }
 
   debugRender() {
@@ -120,6 +141,14 @@ class GameEngine {
     if (!this._doDebugRender) return;
 
     // todo: implement debug rendering, maybe render frameTime_ms
+  }
+
+  requestNextIteration() {
+    //window.requestAnimationFrame(this.iterFrame);
+    const self = this;
+    window.requestAnimationFrame(time => {
+      self.iterFrame(time);
+    });
   }
   
   iterFrame(frameTime) {

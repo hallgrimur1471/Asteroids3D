@@ -1,13 +1,13 @@
 'use strict';
 
-/* global EntityManager Keyboard Ship Arena*/
+/* global EntityManager, Keyboard, Ship, Arena, Cube */
 
 class Asteroids {
   constructor(keyboard) {
     if(keyboard === undefined) {
       console.error("keyboard is not defined");
     }
-    
+      
     this.keyboard = keyboard;
     
     this.entityManager = new EntityManager();
@@ -23,28 +23,17 @@ class Asteroids {
         keyShoot: Keyboard.SHIP_SHOOT,
         keyboard: this.keyboard
     });
-  
-    // Initialize arena
-    const arena = new Arena(ship);
-    this.arena =  arena;
-  
-    // Set the newly created arena as the default arena
+    
+    this.arena = new Arena(ship);
     this.entityManager.setDefaultArena(this.arena);
   }
 
   update(du) {
-    console.log('updating simulation');
-    //processDiagnostics();
+    // console.log('Asteroids: update', du);
     this.entityManager.update(du);
   }
 
-  renderSimulation() {
-     //...
-     //entityManager.render()...
-  }
-
-  processDiagnostics() {
-    // here one can react to diagnostics keypresses
-    // or toggle the audio
+  render() {
+    this.entityManager.render();
   }
 }

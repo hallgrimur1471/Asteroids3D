@@ -1,6 +1,6 @@
 'use strict';
 
-/* global Entity, EntityManager */
+/* global Entity, EntityManager, vec2, Cube */
 
 class Ship extends Entity {
   constructor(shipConfig){
@@ -11,30 +11,29 @@ class Ship extends Entity {
     this.KEY_RIGHT = shipConfig.keyRight;
     this.KEY_SHOOT = shipConfig.keyShoot;
     
-    this.reset_speed = 0.0;
-    this.reset_x = 0.0;
-    this.reset_y = 0.0;
+    this.reset_speed = 0;
+    this.reset_position = new vec2(0.5, 0.5, 0.5);
+    this.reset_pitch = 0; // up/down
+    this.reset_yaw = 0; // left/right
     
     this.initializeVariables();
+    
+    this.cube = new Cube();
   }
   
   initializeVariables(){
     this.reset();
   }
   
-  registerToArena(arena){
-    this.arena = arena;
-  }
-  
-  moveShip(du){
-  console.log('Moving ship', du);
-    
+  move(du){
+    //console.log('Moving ship', du);
   }
   
   reset(){
     this.speed = this.reset_speed;
-    this.x = this.reset_x;
-    this.y = this.reset_y;
+    this.position = this.reset_position;
+    this.pitch = this.reset_pitch;
+    this.yaw = this.reset_yaw;
     this._isDeadNow = false;
   }
   
@@ -43,11 +42,15 @@ class Ship extends Entity {
       return EntityManager.KILL_ME_NOW;
     }
   
-    this.moveShip(du);
+    this.move(du);
   
     // todo: maybeShoot()
     // ...
     // do I do collission detection here? 
     //  nope iirc, the entity manager does that.
+  }
+  
+  render(){
+    this.cube.draw(0,0,0);
   }
 }

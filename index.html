@@ -1,23 +1,24 @@
 <html>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
-
 attribute  vec4 vPosition;
-attribute  vec4 vColor;
-varying vec4 fColor;
+attribute  vec2 vTexCoord;
 
-uniform mat4 rotation;
+varying vec2 fTexCoord;
 
-void main()
+uniform mat4 projection;
+uniform mat4 modelview;
+
+void main() 
 {
-    fColor = vColor;
-    gl_Position = rotation * vPosition;
-}
+    fTexCoord = vTexCoord;
+    gl_Position = projection * modelview * vPosition;
+} 
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
 
-precision mediump float;
+/*precision mediump float;
 
 varying vec4 fColor;
 
@@ -25,6 +26,18 @@ void
 main()
 {
     gl_FragColor = fColor;
+}*/
+
+precision mediump float;
+
+varying vec2 fTexCoord;
+
+uniform sampler2D texture;
+
+void
+main()
+{
+    gl_FragColor = texture2D( texture, fTexCoord );
 }
 </script>
 
@@ -32,8 +45,13 @@ main()
 <script type="text/javascript" src="Common/initShaders.js"></script>
 <script type="text/javascript" src="Common/MV.js"></script>
 
+<script type="text/javascript" src="js/utils.js"></script>
+
+<script type="text/javascript" src="js/Cube.js"></script>
+
 <script type="text/javascript" src="js/Entity.js"></script>
 <script type="text/javascript" src="js/Ship.js"></script>
+<script type="text/javascript" src="js/Boulder.js"></script>
 
 <script type="text/javascript" src="js/Arena.js"></script>
 <script type="text/javascript" src="js/createInitialArena.js"></script>
@@ -46,9 +64,12 @@ main()
 <script type="text/javascript" src="js/main.js"></script>
 
 <body>
-<canvas id="gl-canvas" width="512" height="512">
+<canvas id="gl-canvas" width="700" height="700">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
+
+<img id="cubeImage0" src="./images/redcube2.png" hidden="">
+<img id="cubeImage1" src="./images/bluecube2.png" hidden="">
 
 <br/>
 

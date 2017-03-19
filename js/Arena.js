@@ -1,18 +1,31 @@
 'use strict';
 
-class Arena {
-  constructor(ship, grid) {
-    // todo: should we use a grid?
-    //this.grid = grid || this.generateGrid();
+/* global EntityManager, Boulder */
 
+class Arena {
+  constructor(ship) {
     this.ship = ship;
-    this.ship.registerToArena(this);
+    this.boulders = [
+      new Boulder(),
+      new Boulder(),
+      new Boulder(),
+      new Boulder(),
+      new Boulder(),
+      new Boulder(),
+    ];
   }
   
-  update() {
-    let result = this.ship.update(du);
-    if (result === EntityManager.KILL_ME_NOW) {
-      // todo: handle death of ship
-    }
+  update(du) {
+    [this.ship, ...this.boulders].forEach(entity => {
+      let result = entity.update(du);
+      if (result === EntityManager.KILL_ME_NOW) {
+        // todo: handle death entity
+      }
+    });
+  }
+  
+  render(){
+    this.ship.render();
+    this.boulders.forEach(boulder => boulder.render());
   }
 }
