@@ -7,18 +7,22 @@ class Asteroids {
     if(keyboard === undefined) {
       console.error("keyboard is not defined");
     }
-    
-    this.camera = new Camera(mouse);
-    
     this.mouse = mouse;
     this.keyboard = keyboard;
+    
+    const ship = this.createShip();
+    this.ship = ship;
+    this.camera = new Camera(mouse);
+    this.camera.setEntityToFollow(ship);
+    this.camera.setView(Camera.VIEW_STATIONARY);
+    
     
     this.entityManager = new EntityManager();
     this.createInitialArena();
     this.addCameraEventListeners();
   }
   
-  createInitialArena() {
+  createShip() {
     const ship = new Ship({
         keyUp: Keyboard.SHIP_UP,
         keyDown: Keyboard.SHIP_DOWN,
@@ -27,12 +31,15 @@ class Asteroids {
         keyShoot: Keyboard.SHIP_SHOOT,
         keyboard: this.keyboard
     });
-    
-    this.arena = new Arena(ship);
+    return ship;
+  }
+  
+  createInitialArena() {
+    this.arena = new Arena(this.ship);
     this.entityManager.setDefaultArena(this.arena);
   }
   
-  addCameraEventListeners() {
+  addCameraEventListeners() { // Til hvers er þetta fall.
     if (this.keyboard.eatKey(Keyboard.KEY_MAP.PAUSE)) {
       this.isPaused = !this.isPaused;
     }
@@ -42,6 +49,7 @@ class Asteroids {
     if (this.keyboard.eatKey(Keyboard.CHANGE_CAMERA)) {
       this.camera.nextView();
     }
+      
     // console.log('Asteroids: update', du);
     this.entityManager.update(du);
   }

@@ -7,18 +7,14 @@
 /* global Keyboard, Utils, Camera, gl, mv */
 
 class GameEngine {
-  constructor(game, mouse, keyboard) {
+  constructor(game, keyboard) {
     if(game === undefined) {
       console.error("game is not defined");
     }
     if(keyboard === undefined) {
       console.error("keyboard is not defined");
     }
-    if(mouse === undefined) {
-      console.error("mouse is not defined");
-    }
 
-    this.mouse = mouse;
     this.keyboard = keyboard;
     this.game = game;
     
@@ -109,28 +105,18 @@ class GameEngine {
     // or toggle the audio
   }
   
-//  configureCamera(){ 
-//    //fovy, aspect, near, far
-//  	var proj = perspective( fovy, aspect, near, far );
-//  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-//  	const eye = vec3(1.0, 0.0, 30); // h'er er 30 fasti sem m;tti vera breyta t.d. this.zDist henni m'a svo breya t./.a. skrolla.
-//  	const at = vec3(0.0, 0.0, 0.0);
-//  	const up = vec3(0.0, 1.0, 0.0);
-//  	mv = mult( mv, lookAt( eye, at, up ));
-//  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
-//  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
-//  	//mv = mult( mv, translate(-3, -10, -3));
-//  }
+  clearScreen(){
+    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
+  }
 
   render() {
-    // TODO create rendering context
-    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
+    this.clearScreen();
     
 		Utils.mvStack.push(mv);
 		
 		this.game.render();
 		
-		mv=Utils.mvStack.pop();
+		mv = Utils.mvStack.pop();
   }
 
   debugRender() {

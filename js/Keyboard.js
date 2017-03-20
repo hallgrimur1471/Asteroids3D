@@ -36,6 +36,14 @@ class Keyboard {
     return Keyboard.KEY_MAP.CHANGE_CAMERA;
   }
   
+  static get SHIP_THRUST() {
+    return Keyboard.KEY_MAP.SHIP_THRUST;
+  }
+  
+  static get SHIP_BACK() {
+    return Keyboard.KEY_MAP.SHIP_BACK;
+  }
+  
   static get KEY_MAP(){
     return {
       PAUSE: Keyboard.keyCode('P'), 
@@ -48,6 +56,8 @@ class Keyboard {
       SHIP_LEFT: Keyboard.keyCode('A'),
       SHIP_RIGHT: Keyboard.keyCode('D'),
       SHIP_SHOOT: Keyboard.keyCode(' '),
+      SHIP_THRUST: Keyboard.keyCode('X'),
+      SHIP_BACK: Keyboard.keyCode('Z'),
       
       CHANGE_CAMERA: Keyboard.keyCode('C'),
     };
@@ -71,14 +81,13 @@ class Keyboard {
     window.addEventListener('keyup', handleKeyup);
   }
   
-  get keys() {
-    return this.currentlyPressedKeys;
+  isDown(keyCode) {
+    return this.currentlyPressedKeys[keyCode];
   }
   
-  eatKey(keyCode, commandObject){
-    commandObject = commandObject || this.currentlyPressedKeys;
-    var isDown = commandObject[keyCode];
-    commandObject[keyCode] = false;
+  eatKey(keyCode){
+    const isDown = this.currentlyPressedKeys[keyCode];
+    this.currentlyPressedKeys[keyCode] = false;
     return isDown;
   }
   

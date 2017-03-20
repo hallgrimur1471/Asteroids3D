@@ -12,6 +12,6 @@ function main() {
   const mouse = new Mouse();
   const keyboard = new Keyboard();
   const game = new Asteroids(keyboard, mouse);
-  const gameEngine = new GameEngine(game, mouse, keyboard);
+  const gameEngine = new GameEngine(game, keyboard);
   gameEngine.startGame();
 }

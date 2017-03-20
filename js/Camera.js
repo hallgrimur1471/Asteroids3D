@@ -1,8 +1,17 @@
 'use strict';
 
-/* global Utils, gl, mv */
+/* global Utils, gl, mv, lookAt, mult, vec3, perspective, flatten */
 
 class Camera {
+  static get VIEW_COCKPIT(){
+    return "cockpit_view";
+  }
+  static get VIEW_FOLLOWING(){
+    return "following_view";
+  }
+  static get VIEW_STATIONARY(){
+    return "stationary_view";
+  }
   constructor(mouse) {
     this.mouse = mouse;
     
@@ -14,34 +23,78 @@ class Camera {
     this.zoom = 30;
     this.zoomSensitivity = 5;
     
-    this.views = ["cockpit", "following", "stationary"];
-    this.currentView = this.views[2];
+    this.views = [Camera.VIEW_COCKPIT, Camera.VIEW_FOLLOWING, Camera.VIEW_STATIONARY];
+    
+    this.setView(Camera.VIEW_STATIONARY);
+    
+    const self = this;
+    this.mouse.addMouseScrollListener(e => {
+      if( e.wheelDelta > 0.0 ) {
+        self.zoom -= 1;
+      } else {
+        self.zoom += 1;
+      }
+    });
+  }
+  
+  setView(view){
+    console.info(`View set to ${view}`);
+    this.currentView = view;
     this.updateMouseListeners();
   }
   
+  setEntityToFollow(entity){
+    this.entityToFollow = entity;
+  };
+  
   configure() {
     switch (this.currentView) {
-      case this.views[0]:
-        //...
+      case Camera.VIEW_COCKPIT:
+        this.configureCockpitView();
         break;
-      case this.views[1]:
-        //...
+      case Camera.VIEW_FOLLOWING:
+        this.configureFollowingView();
         break;
-      case this.views[2]:
-        //fovy, aspect, near, far
-      	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
-      	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-      	const eye = vec3(1.0, 0.0, this.zoom); // h'er er 30 fasti sem m;tti vera breyta t.d. this.zDist henni m'a svo breya t./.a. skrolla.
-      	const at = vec3(0.0, 0.0, 0.0);
-      	const up = vec3(0.0, 1.0, 0.0);
-      	mv = mult( mv, lookAt( eye, at, up ));
-      	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
-      	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
-      	//mv = mult( mv, translate(-3, -10, -3));
+      case Camera.VIEW_STATIONARY:
+        this.configureStationaryView();
         break;
       default:
-        console.error(this.currentView, "is not a defined view");
+        console.error(`View: ${this.currentView} is not a defined view.`);
     }
+  }
+  configureCockpitView(){
+    const entity = this.entityToFollow;
+    if(entity === undefined){
+      console.error("No entity to follow defined.");
+    }
+    //fovy, aspect, near, far
+  	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
+  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+  	const eye = entity.position;
+  	const at = add(eye, entity.getHeading());
+  	const up = entity.up || vec3(0.0, 0.0, 1.0); // vesen
+  	
+  	mv = mult(mv, rotateZ(this.entityToFollow.yaw));
+  	mv = mult(mv, rotateX(this.entityToFollow.pitch));
+  	
+  	mv = mult( mv, lookAt( eye, at, up ));
+  	
+  }
+  
+  configureFollowingView(){
+  }
+  
+  configureStationaryView(){
+    //fovy, aspect, near, far
+  	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
+  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+  	const eye = vec3(1.0, 0.0, this.zoom); 
+  	const at = vec3(0.0, 0.0, 0.0);
+  	const up = vec3(0.0, 1.0, 0.0);
+  	mv = mult( mv, lookAt( eye, at, up ));
+  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
+  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
+  	//mv = mult( mv, translate(-3, -10, -3));
   }
   
   nextView() {
@@ -49,9 +102,7 @@ class Camera {
     const currentViewIndex = this.views.indexOf(this.currentView);
     
     const nextView = this.views[ (currentViewIndex+1)%numberOfViews ];
-    this.currentView = nextView;
-    
-    this.updateMouseListeners();
+    this.setView(nextView);
   }
   
   zoom(event) {
@@ -65,13 +116,13 @@ class Camera {
   
   updateMouseListeners() {
     switch (this.currentView) {
-      case this.views[0]:
+      case Camera.VIEW_COCKPIT:
         this.mouse.removeMouseScrollListener(this.zoom);
         break;
-      case this.views[1]:
+      case Camera.VIEW_FOLLOWING:
         this.mouse.removeMouseScrollListener(this.zoom);
         break;
-      case this.views[2]:
+      case Camera.VIEW_STATIONARY:
         this.mouse.addMouseScrollListener(this.zoom);
         break;
       default:

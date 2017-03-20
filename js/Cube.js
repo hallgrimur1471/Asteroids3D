@@ -102,10 +102,10 @@ class Cube {
 			//z = z*6/STAGE_DEPTH;
     	mv = mult(mv, translate(x,y,z));
     	// mv = mult(mv, scale4(6/STAGE_WIDTH, 20/STAGE_HEIGHT, 6/STAGE_DEPTH));
-    	//mv = mult(mv, translate(0.5,0.5,0.5));
     	mv = mult(mv, scale4(scale, scale, scale));
-    	mv = mult(mv, rotate(Math.PI/6, [1, 0, 0]));
-    	mv = mult(mv, rotate(Math.PI/6, [0, 1, 0]));
+    	mv = mult(mv, translate(-0.5,-0.5,-0.5));
+    	//mv = mult(mv, rotate(Math.PI/6, [1, 0, 0]));
+    	//mv = mult(mv, rotate(Math.PI/6, [0, 1, 0]));
     	Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
     	mv = Utils.mvStack.pop();
     }
