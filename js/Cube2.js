@@ -1,48 +1,38 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
-
-// Ég var búinn að gleyma einu í sambandi við Cube, 
-// við ættum eiginlega bara að hafa einn cube, vegna þess að 
-// annars erum við alltaf að búa til nýjann buffer fyrir hvern kubb.
-class Cube {
-  constructor(cubeColorStyle){
+class Cube2 {
+  constructor(){
   	this.image = [];
   	this.vertices = [
-  		vec3( -0.5, -0.5,  0.5 ),
-      vec3( -0.5,  0.5,  0.5 ),
-      vec3(  0.5,  0.5,  0.5 ),
-      vec3(  0.5, -0.5,  0.5 ),
-      vec3( -0.5, -0.5, -0.5 ), 
-      vec3( -0.5,  0.5, -0.5 ),
-      vec3(  0.5,  0.5, -0.5 ),
-      vec3(  0.5, -0.5, -0.5 )
+  		vec3( -0.5, -0.2,  0.5 ),
+      vec3( -0.5,  0.2,  0.5 ),
+      vec3(  0.5,  0.2,  0.5 ),
+      vec3(  0.5, -0.2,  0.5 ),
+      vec3( -0.05, -0.05, -0.5 ), 
+      vec3( -0.05,  0.05, -0.5 ),
+      vec3(  0.05,  0.05, -0.5 ),
+      vec3(  0.05, -0.05, -0.5 )
     ];
     
     this.points = [];
-    this.colors = [];
     this.texCoords = [];
     this.vBuffer;
     this.tBuffer;
     this.cubeTexture = [];
-    this.cubeColorStyle = cubeColorStyle;
     this.init();
   }
   
   init() {
-  		
-    	this.quad( 1, 0, 3, 2, this.points,this.texCoords,this.colors );
-	    this.quad( 2, 3, 7, 6, this.points,this.texCoords,this.colors );
-	    this.quad( 3, 0, 4, 7, this.points,this.texCoords,this.colors );
-	    this.quad( 6, 5, 1, 2, this.points,this.texCoords,this.colors );
-	    this.quad( 4, 5, 6, 7, this.points,this.texCoords,this.colors );
-	    this.quad( 5, 4, 0, 1, this.points,this.texCoords,this.colors );
+    	this.quad( 1, 0, 3, 2, this.points,this.texCoords );
+	    this.quad( 2, 3, 7, 6, this.points,this.texCoords );
+	    this.quad( 3, 0, 4, 7, this.points,this.texCoords );
+	    this.quad( 6, 5, 1, 2, this.points,this.texCoords );
+	    this.quad( 4, 5, 6, 7, this.points,this.texCoords );
+	    this.quad( 5, 4, 0, 1, this.points,this.texCoords );
+	    
 	    this.vBuffer = gl.createBuffer();
   		gl.bindBuffer( gl.ARRAY_BUFFER, this.vBuffer );
   		gl.bufferData( gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW );
-  		
-  		this.cBuffer = gl.createBuffer();
-  		gl.bindBuffer( gl.ARRAY_BUFFER, this.cBuffer );
-  		gl.bufferData( gl.ARRAY_BUFFER, flatten(this.colors), gl.STATIC_DRAW );
 
 	    this.tBuffer = gl.createBuffer();
   		gl.bindBuffer( gl.ARRAY_BUFFER, this.tBuffer );
@@ -72,60 +62,28 @@ class Cube {
 
     }
 
-    quad(a,b,c,d,myPoints,myTexCoords,myColors){
+    quad(a,b,c,d,mypoints,mytexcoords){
     	const texCo = [
 	        vec2(0, 0),
 	        vec2(0, 1),
 	        vec2(1, 1),
 	        vec2(1, 0)
 	    ];
-	    
-	    let vertexColors;
-	    switch (this.cubeColorStyle) {
-	      case "boulder":
-	        vertexColors = [
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ],  
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 0.0, 1.0 ], 
-	        ];
-	        break;
-	      case "ship":
-	        vertexColors = [
-            [ 0.0, 1.0, 0.0, 1.0 ],
-            [ 0.0, 1.0, 0.0, 1.0 ],
-            [ 0.0, 1.0, 0.0, 1.0 ],
-            [ 0.0, 1.0, 0.0, 1.0 ],
-            [ 1.0, 0.0, 1.0, 1.0 ],
-            [ 1.0, 0.0, 1.0, 1.0 ],
-            [ 1.0, 0.0, 1.0, 1.0 ],
-            [ 1.0, 0.0, 1.0, 1.0 ],
-	        ];
-	        break;
-	      default:
-	      	console.error(`${this.cubeColorStyle} is not a defined colorstyle`);
-	    }
 
 	    const indices = [ a, b, c, a, c, d ];
 	    const texind  = [ 1, 0, 3, 1, 3, 2 ];
 
 	    for ( let i = 0; i < indices.length; ++i ) {
-	        myPoints.push( this.vertices[indices[i]] );
-	        myColors.push( vertexColors[a] );
-	        myTexCoords.push( texCo[texind[i]] );
+	        mypoints.push( this.vertices[indices[i]] );
+	        mytexcoords.push( texCo[texind[i]] );
 	    }
     }	
 
-    configureTexture( image , number ) {
+    configureTexture( image , number  ) {
 	    this.cubeTexture[number] = gl.createTexture();
 	    gl.bindTexture( gl.TEXTURE_2D, this.cubeTexture[number] );
 	    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	    gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
-	    console.warn("There is an error on the line below this line");
 	    gl.generateMipmap( gl.TEXTURE_2D );
 	    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
 	    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
@@ -152,12 +110,8 @@ class Cube {
 //    	Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
 //    	mv = Utils.mvStack.pop();
 //    }
-
-		draw() {
-			Utils.draw(this.vBuffer, this.cBuffer, this.points.length);
-		}
     
-    drawWithTexture(number) {
+    draw(number) {
     	if (number === undefined) number = 0;
     	Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
     }

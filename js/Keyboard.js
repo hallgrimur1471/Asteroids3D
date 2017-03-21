@@ -12,12 +12,12 @@ class Keyboard {
     return Keyboard.KEY_MAP.TOGGLE_DEBUG_RENDER;
   }
   
-  static get SHIP_UP() {
-    return Keyboard.KEY_MAP.SHIP_UP;
+  static get SHIP_PITCH_UP() {
+    return Keyboard.KEY_MAP.SHIP_PITCH_UP;
   }
   
-  static get SHIP_DOWN() {
-    return Keyboard.KEY_MAP.SHIP_DOWN;
+  static get SHIP_PITCH_DOWN() {
+    return Keyboard.KEY_MAP.SHIP_PITCH_DOWN;
   }
   
   static get SHIP_LEFT() {
@@ -51,11 +51,11 @@ class Keyboard {
     
       TOGGLE_DEBUG_RENDER: Keyboard.keyCode('T'),
     
-      SHIP_UP: Keyboard.keyCode('S'),
-      SHIP_DOWN: Keyboard.keyCode('W'),
+      SHIP_PITCH_DOWN: Keyboard.keyCode('S'),
+      SHIP_PITCH_UP: Keyboard.keyCode('W'),
       SHIP_LEFT: Keyboard.keyCode('A'),
       SHIP_RIGHT: Keyboard.keyCode('D'),
-      SHIP_SHOOT: Keyboard.keyCode(' '),
+      SHIP_SHOOT: Keyboard.keyCode(' '), // TODO Switch back to space
       SHIP_THRUST: Keyboard.keyCode('X'),
       SHIP_BACK: Keyboard.keyCode('Z'),
       

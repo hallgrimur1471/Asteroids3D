@@ -1022,3 +1022,22 @@ function scale4( x, y, z )
 
     return result;
 }
+
+
+function rotationMatrixFromTwoVectors(x, y){
+    if(x.length !== 3 && x.length !== 4){
+        console.error("first input vector with wrong dimension.");
+    }
+    if(y.length !== 3 && y.length !== 4){
+        console.error("second input vector with wrong dimension.");
+    }
+    if(Math.abs(x[0] - y[0]) < 0.01 && Math.abs(x[1] - y[1]) < 0.01 && Math.abs(x[2] - y[2]) < 0.01){
+        return mat4();
+    }
+
+    const m = mat4();
+    m[0] = vec4(normalize( x ));  
+    m[2] = vec4(normalize( cross( x, y ) ) );
+    m[1] = vec4(normalize( cross( m[2], x) ) );  
+    return m;
+}

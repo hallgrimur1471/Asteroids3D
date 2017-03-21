@@ -20,21 +20,23 @@ class Camera {
     this.near = 0.2;
     this.far = 100;
     
-    this.zoom = 30;
-    this.zoomSensitivity = 5;
+    this.zoom = -20;
+    this.zoomSensitivity = 1;
     
     this.views = [Camera.VIEW_COCKPIT, Camera.VIEW_FOLLOWING, Camera.VIEW_STATIONARY];
-    
+  
     this.setView(Camera.VIEW_STATIONARY);
     
     const self = this;
     this.mouse.addMouseScrollListener(e => {
-      if( e.wheelDelta > 0.0 ) {
-        self.zoom -= 1;
+      if (e.wheelDelta < 0) {
+        self.zoom -= self.zoomSensitivity;
       } else {
-        self.zoom += 1;
+        self.zoom += self.zoomSensitivity;
       }
+      console.log(`Zoom level set to ${this.zoom}`);
     });
+    
   }
   
   setView(view){
@@ -88,8 +90,8 @@ class Camera {
     //fovy, aspect, near, far
   	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
   	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-  	const eye = vec3(1.0, 0.0, this.zoom); 
-  	const at = vec3(0.0, 0.0, 0.0);
+  	const eye = vec3(window.eyex || 0.0, window.eyey || 0.0, this.zoom); 
+  	const at = vec3(0.0, 0.0, -1.0);
   	const up = vec3(0.0, 1.0, 0.0);
   	mv = mult( mv, lookAt( eye, at, up ));
   	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
@@ -106,12 +108,12 @@ class Camera {
   }
   
   zoom(event) {
-    console.log('zooming camera');
     if (event.deltaY < 0) {
       this.zoom += this.zoomSensitivity;
     } else {
       this.zoom -= this.zoomSensitivity;
     }
+    console.log(`Zoom level set to ${this.zoom}`);
   }
   
   updateMouseListeners() {

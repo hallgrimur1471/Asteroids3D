@@ -8,16 +8,19 @@ html, body {
 </style>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
-attribute  vec4 vPosition;
-attribute  vec2 vTexCoord;
+attribute vec4 vPosition;
+attribute vec2 vTexCoord;
+attribute vec4 vColor;
 
 varying vec2 fTexCoord;
+varying vec4 fColor;
 
 uniform mat4 projection;
 uniform mat4 modelview;
 
 void main() 
 {
+    fColor = vColor;
     fTexCoord = vTexCoord;
     gl_Position = projection * modelview * vPosition;
 } 
@@ -26,14 +29,29 @@ void main()
 <script id="fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
+varying vec4 fColor;
 varying vec2 fTexCoord;
 
 uniform sampler2D texture;
 
-void
-main()
+uniform int usingTexture;
+
+void main()
 {
-    gl_FragColor = texture2D( texture, fTexCoord );
+  vec4 color;
+  if(usingTexture == 0)
+  {
+    color = fColor;
+  }
+  else
+  {
+    color = texture2D( texture, fTexCoord );
+    if(color[0] + color[1] + color[2] + color[3] < 0.1)
+    {
+      color = vec4(0.8, 0.8, 0.8, 1.0);
+    }
+  }
+  gl_FragColor = color;
 }
 </script>
 
@@ -44,6 +62,9 @@ main()
 <script type="text/javascript" src="js/utils.js"></script>
 
 <script type="text/javascript" src="js/Cube.js"></script>
+<script type="text/javascript" src="js/Cube2.js"></script>
+<script type="text/javascript" src="js/TexturedCube.js"></script>
+<script type="text/javascript" src="js/Vector.js"></script>
 
 <script type="text/javascript" src="js/Entity.js"></script>
 <script type="text/javascript" src="js/Ship.js"></script>
@@ -67,8 +88,15 @@ main()
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 
-<img id="cubeImage0" src="./images/spaceship2.png" hidden="">
+<img id="cubeImage0" src="./images/spaceship.png" hidden="">
 <img id="cubeImage1" src="./images/boulder.png" hidden="">
+
+
+<img id="texture-letter-b" src="./images/letter-b.png" hidden="">
+<img id="texture-letter-l" src="./images/letter-l.png" hidden="">
+<img id="texture-letter-r" src="./images/letter-r.png" hidden="">
+<img id="texture-letter-t" src="./images/letter-t.png" hidden="">
+<img id="texture-letter-z" src="./images/letter-z.png" hidden="">
 
 <br/>
 
