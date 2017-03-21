@@ -13,7 +13,7 @@ const Utils = {
 	textureHandle: undefined, // Address of the texture uniform
 	usingTexture: undefined, // Address of the usingTexture uniform boolean
 	draw: function(vBuffer, cBuffer, numPoints){
-		//gl.disableVertexAttribArray( Utils.vTexCoord );
+		gl.disableVertexAttribArray( Utils.vTexCoord );
 		
 		gl.uniform1i(Utils.usingTexture, 0);
 		
@@ -26,7 +26,7 @@ const Utils = {
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
 		
-		//gl.enableVertexAttribArray( Utils.vTexCoord );
+		gl.enableVertexAttribArray( Utils.vTexCoord );
 	},
 	
 	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints){

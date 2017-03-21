@@ -28,11 +28,6 @@ class Ship extends Entity {
     
     this.upVector = vec3(0.0, 1.0, 0.0);
     this.headingVector = vec3(0.0, 0.0, 1.0);
-      
-    if(!window.ARNAR){
-      //console.info("Turning window.ARNAR on, turn off to get correct behavior.");
-      window.ARNAR = true;
-    }
     
     this.vector = new Vector();
     this.bullets = [];
@@ -101,13 +96,13 @@ class Ship extends Entity {
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
       this.pitch -= this.turnRate;
       
-      this.changePitch(1);
+      this.changePitch(-1);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
       this.pitch += this.turnRate;
       
-      this.changePitch(-1);
+      this.changePitch(1);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_RIGHT)) {
@@ -163,55 +158,18 @@ class Ship extends Entity {
   }
   
   render(){
-
-    if(window.ARNAR){
-      Utils.mvStack.push(mv);
-      //const upVector = this.calculateUpVector();
-      
-      mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
-      //mv = mult(mv, rotate(-this.yaw, upVector));
-      //console.info(shipYAxis);
-      //mv = mult(mv, rotationMatrixFromTwoVectors(this.upVector, this.headingVector));
-      
-      mv = mult(mv, scalem(1/3, 1/3, 1/3));
-      mv = mult(mv, translate(-1.0, -1.0, -1.0));
-      if(!this.cubeSpecs){
-        this.texturedCube = new TexturedCube();
-        this.cubeSpecs = [
-          { x: 1, y: 0, z: 0, textureName: TexturedCube.TEXTURE_LETTER_B },
-          { x: 0, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_R },
-          { x: 1, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_Z },
-          { x: 2, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_L },
-          { x: 1, y: 2, z: 0, textureName: TexturedCube.TEXTURE_LETTER_T },
-          { x: 1, y: 1, z: 1, textureName: TexturedCube.TEXTURE_LETTER_Z },
-          { x: 1, y: 1, z: 2, textureName: TexturedCube.TEXTURE_LETTER_Z },
-        ]
-      }
-      this.cubeSpecs.forEach(cubeSpec => {
-        this.texturedCube.render(cubeSpec.x, cubeSpec.y, cubeSpec.z, cubeSpec.textureName);
-      });
-      
-      //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
-      mv = Utils.mvStack.pop();
-      
-      this.renderBullets();
-      
-      this.vector.render(0, 0, window.posx || 5, Vector.TEXTURE_LETTER_L);
-    } else {
       Utils.mvStack.push(mv);
       const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
       
       mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
       mv = mult(mv, rotate(-this.yaw, shipYAxis));
-      //console.info(shipYAxis);
       mv = mult(mv, rotateX(this.pitch));
       mv = mult(mv, scalem(8,8,8));
       
       this.cube.draw(0);
-      //this.cube.draw(this.position[0], this.position[1], this.position[2], 0, 1);
       
       mv=Utils.mvStack.pop();
-    }
+ //   }
   }
   
   renderBullets(){
@@ -230,3 +188,38 @@ class Ship extends Entity {
     mv=Utils.mvStack.pop();
   }
 }
+
+//    if(window.ARNAR){
+//      Utils.mvStack.push(mv);
+//      //const upVector = this.calculateUpVector();
+//      
+//      mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+//      //mv = mult(mv, rotate(-this.yaw, upVector));
+//      //console.info(shipYAxis);
+//      //mv = mult(mv, rotationMatrixFromTwoVectors(this.upVector, this.headingVector));
+//      
+//      mv = mult(mv, scalem(1/3, 1/3, 1/3));
+//      mv = mult(mv, translate(-1.0, -1.0, -1.0));
+//      if(!this.cubeSpecs){
+//        this.texturedCube = new TexturedCube();
+//        this.cubeSpecs = [
+//          { x: 1, y: 0, z: 0, textureName: TexturedCube.TEXTURE_LETTER_B },
+//          { x: 0, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_R },
+//          { x: 1, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_Z },
+//          { x: 2, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_L },
+//          { x: 1, y: 2, z: 0, textureName: TexturedCube.TEXTURE_LETTER_T },
+//          { x: 1, y: 1, z: 1, textureName: TexturedCube.TEXTURE_LETTER_Z },
+//          { x: 1, y: 1, z: 2, textureName: TexturedCube.TEXTURE_LETTER_Z },
+//        ]
+//      }
+//      this.cubeSpecs.forEach(cubeSpec => {
+//        this.texturedCube.render(cubeSpec.x, cubeSpec.y, cubeSpec.z, cubeSpec.textureName);
+//      });
+//      
+//      //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
+//      mv = Utils.mvStack.pop();
+//      
+//      this.renderBullets();
+//      
+//      this.vector.render(0, 0, window.posx || 5, Vector.TEXTURE_LETTER_L);
+//    } else {

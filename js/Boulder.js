@@ -3,7 +3,7 @@
 /* global Entity, EntityManager, vec3, rotate, mv, Utils, mult, Cube, translate, add */
 
 class Boulder extends Entity {
-  constructor(shipConfig){
+  constructor(shipConfig){ //todo: remove shipConfig ?
     super("Boulder");
     
     this.position = new vec3(5*(Math.random()-0.5), 5*(Math.random()-0.5), 5*(Math.random()-0.5));
@@ -17,7 +17,7 @@ class Boulder extends Entity {
   }
   
   move(du){
-    //console.log('Moving ship', du);
+    //console.log('Moving boulder', du);
   }
   
   update(du){

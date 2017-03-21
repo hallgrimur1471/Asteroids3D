@@ -1,9 +1,5 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
-
-// Ég var búinn að gleyma einu í sambandi við Cube, 
-// við ættum eiginlega bara að hafa einn cube, vegna þess að 
-// annars erum við alltaf að búa til nýjann buffer fyrir hvern kubb.
 class Cube {
   constructor(cubeColorStyle){
   	this.image = [];
@@ -54,21 +50,9 @@ class Cube {
   
   		this.image[0] = document.getElementById("cubeImage0");
   		this.image[1] = document.getElementById("cubeImage1");
-  		//this.image[2] = document.getElementById("cubeImage2");
-  		//this.image[3] = document.getElementById("cubeImage3");  
-  		//this.image[4] = document.getElementById("cubeImage4");  
-  		//this.image[5] = document.getElementById("cubeImage5");  
-  		//this.image[6] = document.getElementById("cubeImage6");  
-  		//this.image[7] = document.getElementById("cubeImage7");  
 
     	this.configureTexture(this.image[0], 0);
     	this.configureTexture(this.image[1], 1);
-    	//this.configureTexture(this.image[2], 2);
-    	//this.configureTexture(this.image[3], 3);
-    	//this.configureTexture(this.image[4], 4);
-    	//this.configureTexture(this.image[5], 5);
-    	//this.configureTexture(this.image[6], 6);
-    	//this.configureTexture(this.image[7], 7);
 
     }
 
@@ -131,28 +115,6 @@ class Cube {
 	    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
 		}
 
-//    draw(x,y,z,number,scale){
-//			if (number === undefined) number = 0;
-//			if (scale === undefined) scale = 1.0;
-//			
-//    	Utils.mvStack.push(mv);
-//			
-//    	//const STAGE_WIDTH = 6;
-//    	//const STAGE_HEIGHT = 20;
-//    	//const STAGE_DEPTH = 6;
-//			//x = x*6/STAGE_WIDTH;
-//			//y = y*20/STAGE_HEIGHT;
-//			//z = z*6/STAGE_DEPTH;
-//    	mv = mult(mv, translate(x,y,z));
-//    	// mv = mult(mv, scale4(6/STAGE_WIDTH, 20/STAGE_HEIGHT, 6/STAGE_DEPTH));
-//    	mv = mult(mv, scale4(scale, scale, scale));
-//    	mv = mult(mv, translate(-0.5,-0.5,-0.5));
-//    	//mv = mult(mv, rotate(Math.PI/6, [1, 0, 0]));
-//    	//mv = mult(mv, rotate(Math.PI/6, [0, 1, 0]));
-//    	Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
-//    	mv = Utils.mvStack.pop();
-//    }
-
 		draw() {
 			Utils.draw(this.vBuffer, this.cBuffer, this.points.length);
 		}
@@ -162,3 +124,25 @@ class Cube {
     	Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
     }
 }
+
+//    draw(x,y,z,number,scale){
+//      if (number === undefined) number = 0;
+//      if (scale === undefined) scale = 1.0;
+//      
+//      Utils.mvStack.push(mv);
+//      
+//      //const STAGE_WIDTH = 6;
+//      //const STAGE_HEIGHT = 20;
+//      //const STAGE_DEPTH = 6;
+//      //x = x*6/STAGE_WIDTH;
+//      //y = y*20/STAGE_HEIGHT;
+//      //z = z*6/STAGE_DEPTH;
+//      mv = mult(mv, translate(x,y,z));
+//      // mv = mult(mv, scale4(6/STAGE_WIDTH, 20/STAGE_HEIGHT, 6/STAGE_DEPTH));
+//      mv = mult(mv, scale4(scale, scale, scale));
+//      mv = mult(mv, translate(-0.5,-0.5,-0.5));
+//      //mv = mult(mv, rotate(Math.PI/6, [1, 0, 0]));
+//      //mv = mult(mv, rotate(Math.PI/6, [0, 1, 0]));
+//      Utils.draw(this.vBuffer, this.tBuffer, this.cubeTexture[number] , this.points.length);
+//      mv = Utils.mvStack.pop();
+//    }
