@@ -164,7 +164,7 @@ class Ship extends Entity {
       mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
       mv = mult(mv, rotate(-this.yaw, shipYAxis));
       mv = mult(mv, rotateX(this.pitch));
-      mv = mult(mv, scalem(8,8,8));
+      mv = mult(mv, scalem(0.2,0.2,0.2));
       
       this.cube.draw(0);
       

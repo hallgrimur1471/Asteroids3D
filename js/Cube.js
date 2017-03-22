@@ -109,7 +109,7 @@ class Cube {
 	    gl.bindTexture( gl.TEXTURE_2D, this.cubeTexture[number] );
 	    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	    gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
-	    console.warn("There is an error on the line below this line");
+	    //console.warn("There is an error on the line below this line");
 	    gl.generateMipmap( gl.TEXTURE_2D );
 	    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
 	    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );

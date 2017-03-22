@@ -88,12 +88,14 @@ class Camera {
   
   configureStationaryView(){
     //fovy, aspect, near, far
-  	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
-  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-  	const eye = vec3(window.eyex || 0.0, window.eyey || 0.0, this.zoom); 
+    const eye =  vec3(0.0, 0.0, -1.6);
   	const at = vec3(0.0, 0.0, -1.0);
   	const up = vec3(0.0, 1.0, 0.0);
   	mv = mult( mv, lookAt( eye, at, up ));
+
+    var proj = perspective( this.fovy, this.aspect, this.near, this.far );
+    gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+
   	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
   	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
   	//mv = mult( mv, translate(-3, -10, -3));

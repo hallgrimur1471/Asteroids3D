@@ -36,7 +36,6 @@ const Utils = {
 
 		gl.uniform4fv( Utils.uniColor, lineColor );
 
-		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.LINES, 0, numPoints);
 	},
 	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints){

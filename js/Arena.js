@@ -13,6 +13,7 @@ class Arena {
       new Boulder(),
       new Boulder(),
     ];
+    this.stageCube = new StageCube();
   }
   
   update(du) {
@@ -25,7 +26,8 @@ class Arena {
   }
   
   render(){
-    this.ship.render();
-    this.boulders.forEach(boulder => boulder.render());
+    //this.ship.render();
+    //this.boulders.forEach(boulder => boulder.render());
+    this.stageCube.render();
   }
 }
