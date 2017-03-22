@@ -65,7 +65,7 @@ const Utils = {
 		if ( !gl ) { alert( "WebGL isn't available" ); }
 
 		gl.viewport( 0, 0, canvas.width, canvas.height );
-		gl.clearColor( 256/256, 256/256, 256/256, 1.0 );
+		gl.clearColor( 0/256, 0/256, 0/256, 1.0 );
 		
 		//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 		//gl.enable(gl.BLEND);

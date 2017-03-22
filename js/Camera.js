@@ -20,14 +20,50 @@ class Camera {
     this.near = 0.2;
     this.far = 100;
     
-    this.zoom = -20;
-    this.zoomSensitivity = 1;
+    this.setProjection(this.fovy, this.aspect, this.near, this.far);
     
     this.views = [Camera.VIEW_COCKPIT, Camera.VIEW_FOLLOWING, Camera.VIEW_STATIONARY];
   
     this.setView(Camera.VIEW_STATIONARY);
     
-    const self = this;
+    // camera rotation and zoom
+    this.rotating = false;
+    this.spinY = 0.0;
+    this.spinX = 0.0;
+    this.origX;
+    this.origY;
+    this.zoom = -1.6;
+    this.zoomSensitivity = 0.1;
+    this.addMouseListeners(this);
+  }
+
+  setProjection(fovy, aspect, near, far) {
+    var proj = perspective( fovy, aspect, near, far );
+    gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+  }
+
+  addMouseListeners(self) {
+    this.mouse.addMouseDownListener(e => {
+      e.preventDefault();
+      this.rotating = true;
+      this.origX = e.offsetX;
+      this.origY = e.offsetY;
+    });
+
+    this.mouse.addMouseMoveListener(e => {
+      if (this.rotating) {
+        this.spinY = (this.spinY + (this.origX-e.offsetX)) % 360;
+        this.spinX = (this.spinX - (this.origY-e.offsetY)) % 360;
+        this.origX = e.offsetX;
+        this.origY = e.offsetY;
+      }
+      console.info(`offsetY: ${e.offsetY}, offsetX: ${e.offsetX}`);
+    });
+
+    this.mouse.addMouseUpListener(e => {
+      this.rotating = false;
+    });
+
     this.mouse.addMouseScrollListener(e => {
       if (e.wheelDelta < 0) {
         self.zoom -= self.zoomSensitivity;
@@ -36,7 +72,6 @@ class Camera {
       }
       console.log(`Zoom level set to ${this.zoom}`);
     });
-    
   }
   
   setView(view){
@@ -87,14 +122,12 @@ class Camera {
   }
   
   configureStationaryView(){
-    //fovy, aspect, near, far
-    const eye =  vec3(0.0, 0.0, -1.6);
-  	const at = vec3(0.0, 0.0, -1.0);
+    const eye =  vec3(0.0, 0.0, this.zoom);
+  	const at = vec3(0.0, 0.0, this.zoom+0.1);
   	const up = vec3(0.0, 1.0, 0.0);
   	mv = mult( mv, lookAt( eye, at, up ));
 
-    var proj = perspective( this.fovy, this.aspect, this.near, this.far );
-    gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+    mv = mult( mv, mult( rotateX(this.spinX), rotateY(this.spinY)));
 
   	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
   	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );

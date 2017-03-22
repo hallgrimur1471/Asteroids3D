@@ -2,12 +2,6 @@
 class Mouse {
   constructor() {
     this.canvas = document.getElementById("gl-canvas");
-    
-    this.rotating = false; // Are we currently rotating the view?
-    this.spinY = 0.0;
-    this.spinX = 0.0;
-    this.origX;
-    this.origY;
     this.scrollPosition = 1.0;
     this.scrollSensitivity = 0.1;
     
