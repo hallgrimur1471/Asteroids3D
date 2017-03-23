@@ -22,9 +22,9 @@ class Ship extends Entity {
     this.deceleration = 1-0.005;
     
     this.initializeVariables();
-    
-    this.cube = new Cube("ship");
-    this.cube.cubeColorStyle = "ship";
+
+    this.color = vec4(0.0, 0.0, 0.0, 1.0);
+    this.shipVertices = new ShipVertices(this.color);
     
     this.upVector = vec3(0.0, 1.0, 0.0);
     this.headingVector = vec3(0.0, 0.0, 1.0);
@@ -158,18 +158,19 @@ class Ship extends Entity {
   }
   
   render(){
-      Utils.mvStack.push(mv);
-      const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
-      
-      mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
-      mv = mult(mv, rotate(-this.yaw, shipYAxis));
-      mv = mult(mv, rotateX(this.pitch));
-      mv = mult(mv, scalem(0.2,0.2,0.2));
-      
-      this.cube.draw(0);
-      
-      mv=Utils.mvStack.pop();
- //   }
+    Utils.mvStack.push(mv);
+    const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
+    
+    mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    mv = mult(mv, rotate(-this.yaw, shipYAxis));
+    mv = mult(mv, rotateX(this.pitch));
+    const shipScale = 0.1;
+    mv = mult(mv, scalem(shipScale, shipScale, shipScale));
+    
+    this.shipVertices.draw();
+    //this.cube.draw();
+    
+    mv=Utils.mvStack.pop();
   }
   
   renderBullets(){

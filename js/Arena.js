@@ -26,8 +26,8 @@ class Arena {
   }
   
   render(){
-    //this.ship.render();
-    //this.boulders.forEach(boulder => boulder.render());
     this.stageCube.render();
+    this.ship.render();
+    //this.boulders.forEach(boulder => boulder.render());
   }
 }

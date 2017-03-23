@@ -32,7 +32,7 @@ class Camera {
     this.spinX = 0.0;
     this.origX;
     this.origY;
-    this.zoom = -1.6;
+    this.zoom = 0.5; //-4.2
     this.zoomSensitivity = 0.1;
     this.addMouseListeners(this);
   }
@@ -53,11 +53,10 @@ class Camera {
     this.mouse.addMouseMoveListener(e => {
       if (this.rotating) {
         this.spinY = (this.spinY + (this.origX-e.offsetX)) % 360;
-        this.spinX = (this.spinX - (this.origY-e.offsetY)) % 360;
+        this.spinX = (this.spinX + (this.origY-e.offsetY)) % 360;
         this.origX = e.offsetX;
         this.origY = e.offsetY;
       }
-      console.info(`offsetY: ${e.offsetY}, offsetX: ${e.offsetX}`);
     });
 
     this.mouse.addMouseUpListener(e => {
@@ -66,9 +65,9 @@ class Camera {
 
     this.mouse.addMouseScrollListener(e => {
       if (e.wheelDelta < 0) {
-        self.zoom -= self.zoomSensitivity;
-      } else {
         self.zoom += self.zoomSensitivity;
+      } else {
+        self.zoom -= self.zoomSensitivity;
       }
       console.log(`Zoom level set to ${this.zoom}`);
     });
@@ -123,15 +122,11 @@ class Camera {
   
   configureStationaryView(){
     const eye =  vec3(0.0, 0.0, this.zoom);
-  	const at = vec3(0.0, 0.0, this.zoom+0.1);
+  	const at = vec3(0.0, 0.0, this.zoom-0.1);
   	const up = vec3(0.0, 1.0, 0.0);
   	mv = mult( mv, lookAt( eye, at, up ));
 
     mv = mult( mv, mult( rotateX(this.spinX), rotateY(this.spinY)));
-
-  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinX), [1, 0, 0] ) );
-  	//mv = mult( mv, rotate( parseFloat(EventHandlers.spinY), [0, 1, 0] ) );
-  	//mv = mult( mv, translate(-3, -10, -3));
   }
   
   nextView() {

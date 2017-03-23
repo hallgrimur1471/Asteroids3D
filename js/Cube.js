@@ -116,7 +116,7 @@ class Cube {
 		}
 
 		draw() {
-			Utils.draw(this.vBuffer, this.cBuffer, this.points.length);
+			Utils.draw(this.vBuffer, this.points.length);
 		}
     
     drawWithTexture(number) {

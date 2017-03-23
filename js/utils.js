@@ -13,24 +13,17 @@ const Utils = {
 	shaderProgram: undefined, // Address of the shader program
 	//textureHandle: undefined, // Address of the texture uniform
 	//usingTexture: undefined, // Address of the usingTexture uniform boolean
-	draw: function(vBuffer, cBuffer, numPoints){
-		gl.disableVertexAttribArray( Utils.vTexCoord );
-		
-		gl.uniform1i(Utils.usingTexture, 0);
+	draw: function(vBuffer, color, numPoints){
 		
 		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
-		
-		//gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
-		//gl.vertexAttribPointer( Utils.vColor, 4, gl.FLOAT, false, 0, 0 );
+
+		gl.uniform4fv( Utils.uniColor, color);
 		
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
-		
-		gl.enableVertexAttribArray( Utils.vTexCoord );
 	},
 	drawLines: function(vBuffer, lineColor, numPoints){
-
 		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
 
@@ -65,6 +58,7 @@ const Utils = {
 		if ( !gl ) { alert( "WebGL isn't available" ); }
 
 		gl.viewport( 0, 0, canvas.width, canvas.height );
+		//gl.clearColor( 256/256, 256/256, 256/256, 1.0 );
 		gl.clearColor( 0/256, 0/256, 0/256, 1.0 );
 		
 		//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
