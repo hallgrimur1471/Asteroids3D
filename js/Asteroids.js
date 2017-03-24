@@ -23,12 +23,7 @@ class Asteroids {
   
   createShip() {
     const ship = new Ship({
-        keyUp: Keyboard.SHIP_UP,
-        keyDown: Keyboard.SHIP_DOWN,
-        keyLeft: Keyboard.SHIP_LEFT,
-        keyRight: Keyboard.SHIP_RIGHT,
-        keyShoot: Keyboard.SHIP_SHOOT,
-        keyboard: this.keyboard
+      keyboard: this.keyboard
     });
     return ship;
   }

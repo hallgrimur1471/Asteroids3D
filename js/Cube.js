@@ -116,7 +116,10 @@ class Cube {
 		}
 
 		draw() {
-			Utils.draw(this.vBuffer, this.points.length);
+      Utils.mvStack.push(mv);
+      mv = mult(mv, scalem(2.0, 2.0, 2.0))
+			Utils.draw(this.vBuffer, vec4(0.0, 0.0, 0.5, 1.0), this.points.length);
+      Utils.mvStack.pop(mv);
 		}
     
     drawWithTexture(number) {

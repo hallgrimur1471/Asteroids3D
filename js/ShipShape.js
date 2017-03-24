@@ -1,14 +1,14 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
-class ShipVertices {
+class ShipShape {
   constructor(color){
     this.scale = 1.0;
-    this.width = this.scale*3.0;
+    this.width = 2.0;
     this.height = this.scale*1.0;
     this.noseLength = this.scale*4.0;
     this.concave = this.scale*0.5;
 
-    this.centerOfRotation = 0.5;
+    this.centerOfRotation = 0.0;
 
     this.vertices = [
       vec3( 0.0,  this.height, -this.concave + this.centerOfRotation),

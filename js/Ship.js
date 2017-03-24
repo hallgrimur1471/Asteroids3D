@@ -5,31 +5,25 @@
 class Ship extends Entity {
   constructor(shipConfig){
     super("Ship");
-    this.KEY_UP = shipConfig.keyUp;
-    this.KEY_DOWN = shipConfig.keyDown;
-    this.KEY_LEFT = shipConfig.keyLeft;
-    this.KEY_RIGHT = shipConfig.keyRight;
-    this.KEY_SHOOT = shipConfig.keyShoot;
     this.keyboard = shipConfig.keyboard;
+
+    this.speed;
+    this.position;
+    this.headingVector;
+    this.upVector;
+    this.crossVector;
     
-    this.reset_speed = 0;
-    this.reset_position = new vec3(0.0, 0.0, 0.0);
-    this.reset_pitch = 0; // up/down
-    this.reset_yaw = 0; // left/right
-    
-    this.turnRate = 0.5;
+    this.pitchRate = 1.2;
+    this.yawRate = 1.2;
+    this.rollRate = 1.2;
     this.thrustAcceleration = 0.001;
     this.deceleration = 1-0.005;
-    
+
     this.initializeVariables();
 
-    this.color = vec4(0.0, 0.0, 0.0, 1.0);
-    this.shipVertices = new ShipVertices(this.color);
-    
-    this.upVector = vec3(0.0, 1.0, 0.0);
-    this.headingVector = vec3(0.0, 0.0, 1.0);
-    
-    this.vector = new Vector();
+    this.color = vec4(0.2, 0.0, 0.0, 1.0);
+    this.shipShape = new ShipShape(this.color);
+
     this.bullets = [];
   }
   
@@ -37,11 +31,11 @@ class Ship extends Entity {
     this.reset();
   }
   
-  getHeading(){
-    const rotMat = mult(rotateX(this.pitch), rotateZ(this.yaw));
-    const heading = mult(rotMat, vec4(0, 0, 1, 1));
-    return vec3(heading);
-  }
+  //getHeading(){
+  //  const rotMat = mult(rotateX(this.pitch), rotateZ(this.yaw));
+  //  const heading = mult(rotMat, vec4(0, 0, 1, 1));
+  //  return vec3(heading);
+  //}
   
   getVelocity(){
     const velocity = scale(this.speed, this.headingVector);
@@ -56,10 +50,12 @@ class Ship extends Entity {
   }
   
   reset(){
-    this.speed = this.reset_speed;
-    this.position = this.reset_position;
-    this.pitch = this.reset_pitch;
-    this.yaw = this.reset_yaw;
+    this.speed = 0;
+    this.position = vec3(0.0, 0.0, 0.0);
+
+    this.headingVector = vec3(0.0, 0.0, 1.0);
+    this.upVector = vec3(0.0, 1.0, 0.0);
+    this.crossVector = cross(this.upVector, this.headingVector);
     this._isDeadNow = false;
   }
   
@@ -75,17 +71,28 @@ class Ship extends Entity {
   }
   
   changePitch(deg){
-    const crossVec = cross(this.upVector, this.headingVector);
-    const rotMat = rotate(deg, crossVec);
-    this.headingVector = vec3(mult(rotMat, vec4(this.headingVector)));
-    this.upVector = vec3(mult(rotMat, vec4(this.upVector)));
+    const rotMat = rotate(deg, this.crossVector);
+    this.updateVectors(rotMat);
     console.log("Pitch", this.headingVector, this.upVector);
   }
   
   changeYaw(deg){
     const rotMat = rotate(deg, this.upVector);
-    this.headingVector = vec3(mult(rotMat, vec4(this.headingVector)));
+    this.updateVectors(rotMat);
     console.log("Yaw", this.headingVector);
+  }
+
+  changeRoll(deg){
+    const rotMat = rotate(deg, this.headingVector);
+    this.updateVectors(rotMat);
+    console.log("roll", this.headingVector);
+  }
+
+  updateVectors(rotMat) {
+    this.headingVector = vec3(mult(rotMat, vec4(this.headingVector)));
+    this.upVector = vec3(mult(rotMat, vec4(this.upVector)));
+    //this.crossVector = cross(this.headingVector, this.upVector);
+    this.crossVector = cross(this.upVector, this.headingVector);
   }
   
   update(du){
@@ -94,27 +101,27 @@ class Ship extends Entity {
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
-      this.pitch -= this.turnRate;
-      
-      this.changePitch(-1);
+      this.changePitch(this.pitchRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
-      this.pitch += this.turnRate;
-      
-      this.changePitch(1);
+      this.changePitch(-this.pitchRate);
     }
     
-    if (this.keyboard.isDown(Keyboard.SHIP_RIGHT)) {
-      this.yaw -= this.turnRate;
-      
-      this.changeYaw(-1);
+    if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
+      this.changeYaw(-this.yawRate);
     }
     
-    if (this.keyboard.isDown(Keyboard.SHIP_LEFT)) {
-      this.yaw += this.turnRate;
-      
-      this.changeYaw(1);
+    if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
+      this.changeYaw(this.yawRate);
+    }
+    
+    if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
+      this.changeRoll(-this.rollRate);
+    }
+    
+    if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
+      this.changeRoll(this.rollRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
@@ -159,16 +166,20 @@ class Ship extends Entity {
   
   render(){
     Utils.mvStack.push(mv);
-    const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
+    //const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
     
-    mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
-    mv = mult(mv, rotate(-this.yaw, shipYAxis));
-    mv = mult(mv, rotateX(this.pitch));
-    const shipScale = 0.1;
+    //mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    //mv = mult(mv, rotate(-this.yaw, shipYAxis));
+    //mv = mult(mv, rotate(this.pitch));
+
+    const rotMat = transpose(mat4(vec4(this.crossVector, 0),
+                                  vec4(this.upVector, 0),
+                                  vec4(this.headingVector, 0)));
+    mv = mult(mv, rotMat);
+    const shipScale = 0.05;
     mv = mult(mv, scalem(shipScale, shipScale, shipScale));
     
-    this.shipVertices.draw();
-    //this.cube.draw();
+    this.shipShape.draw();
     
     mv=Utils.mvStack.pop();
   }

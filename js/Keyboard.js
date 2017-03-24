@@ -20,12 +20,20 @@ class Keyboard {
     return Keyboard.KEY_MAP.SHIP_PITCH_DOWN;
   }
   
-  static get SHIP_LEFT() {
-    return Keyboard.KEY_MAP.SHIP_LEFT;
+  static get SHIP_YAW_LEFT() {
+    return Keyboard.KEY_MAP.SHIP_YAW_LEFT;
   }
   
-  static get SHIP_RIGHT() {
-    return Keyboard.KEY_MAP.SHIP_RIGHT;
+  static get SHIP_YAW_RIGHT() {
+    return Keyboard.KEY_MAP.SHIP_YAW_RIGHT;
+  }
+  
+  static get SHIP_ROLL_LEFT() {
+    return Keyboard.KEY_MAP.SHIP_ROLL_LEFT;
+  }
+  
+  static get SHIP_ROLL_RIGHT() {
+    return Keyboard.KEY_MAP.SHIP_ROLL_RIGHT;
   }
   
   static get SHIP_SHOOT() {
@@ -53,8 +61,10 @@ class Keyboard {
     
       SHIP_PITCH_DOWN: Keyboard.keyCode('S'),
       SHIP_PITCH_UP: Keyboard.keyCode('W'),
-      SHIP_LEFT: Keyboard.keyCode('A'),
-      SHIP_RIGHT: Keyboard.keyCode('D'),
+      SHIP_YAW_LEFT: Keyboard.keyCode('A'),
+      SHIP_YAW_RIGHT: Keyboard.keyCode('D'),
+      SHIP_ROLL_LEFT: Keyboard.keyCode('Q'),
+      SHIP_ROLL_RIGHT: Keyboard.keyCode('E'),
       SHIP_SHOOT: Keyboard.keyCode(' '), // TODO Switch back to space
       SHIP_THRUST: Keyboard.keyCode('X'),
       SHIP_BACK: Keyboard.keyCode('Z'),

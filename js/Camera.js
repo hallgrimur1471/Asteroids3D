@@ -32,7 +32,7 @@ class Camera {
     this.spinX = 0.0;
     this.origX;
     this.origY;
-    this.zoom = 0.5; //-4.2
+    this.zoom = 4.0;
     this.zoomSensitivity = 0.1;
     this.addMouseListeners(this);
   }
@@ -121,9 +121,9 @@ class Camera {
   }
   
   configureStationaryView(){
-    const eye =  vec3(0.0, 0.0, this.zoom);
-  	const at = vec3(0.0, 0.0, this.zoom-0.1);
-  	const up = vec3(0.0, 1.0, 0.0);
+    const eye =  vec3(0.0, 0.0, this.zoom, 1.0);
+  	const at = vec3(0.0, 0.0, this.zoom-0.1, 1.0);
+  	const up = vec3(0.0, 1.0, 0.0, 1.0);
   	mv = mult( mv, lookAt( eye, at, up ));
 
     mv = mult( mv, mult( rotateX(this.spinX), rotateY(this.spinY)));
