@@ -61,13 +61,13 @@ const Utils = {
 		//gl.clearColor( 256/256, 256/256, 256/256, 1.0 );
 		gl.clearColor( 0/256, 0/256, 0/256, 1.0 );
 		
-		//gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-		//gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+		gl.enable(gl.BLEND);
 		
-		//gl.enable(gl.DEPTH_TEST);
+		gl.enable(gl.DEPTH_TEST);
 		
-		//gl.enable(gl.CULL_FACE);
-		//gl.cullFace(gl.BACK);
+		gl.enable(gl.CULL_FACE);
+		gl.cullFace(gl.BACK);
 	},
 	sind: function(deg){
 		return Math.sin(deg*Math.PI/180);
