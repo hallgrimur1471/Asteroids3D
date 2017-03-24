@@ -90,6 +90,18 @@ class Cube {
             [ 1.0, 0.0, 1.0, 1.0 ],
 	        ];
 	        break;
+        case "bullet":
+          vertexColors = [
+            [ 0.0, 1.0, 0.0, 1.0 ],
+            [ 0.0, 1.0, 0.0, 1.0 ],
+            [ 0.0, 1.0, 0.0, 1.0 ],
+            [ 0.0, 1.0, 0.0, 1.0 ],
+            [ 1.0, 0.0, 1.0, 1.0 ],
+            [ 1.0, 0.0, 1.0, 1.0 ],
+            [ 1.0, 0.0, 1.0, 1.0 ],
+            [ 1.0, 0.0, 1.0, 1.0 ],
+          ];
+          break;
 	      default:
 	      	console.error(`${this.cubeColorStyle} is not a defined colorstyle`);
 	    }
@@ -118,7 +130,7 @@ class Cube {
 		draw() {
       Utils.mvStack.push(mv);
       mv = mult(mv, scalem(2.0, 2.0, 2.0))
-			Utils.draw(this.vBuffer, vec4(0.0, 0.0, 0.5, 1.0), this.points.length);
+			Utils.draw(this.vBuffer, vec4(0.0, 0.0, 1.0, 1.0), this.points.length);
       Utils.mvStack.pop(mv);
 		}
     

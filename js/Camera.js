@@ -32,8 +32,8 @@ class Camera {
     this.spinX = 0.0;
     this.origX;
     this.origY;
-    this.zoom = -4.0;
-    this.zoomSensitivity = 0.1;
+    this.zoom = -40.0;
+    this.zoomSensitivity = 1.0;
     this.addMouseListeners(this);
   }
 
@@ -99,25 +99,20 @@ class Camera {
     }
   }
   configureCockpitView(){
+    let eye = add(this.entityToFollow.position, scale(0.20, this.entityToFollow.headingVector));
+    //eye = add(eye, scale(0.1, this.entityToFollow.upVector));
+    const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
+    const up = this.entityToFollow.upVector;
+    mv = mult(mv, lookAt(eye, at, up));
     const entity = this.entityToFollow;
-    if(entity === undefined){
-      console.error("No entity to follow defined.");
-    }
-    //fovy, aspect, near, far
-  	var proj = perspective( this.fovy, this.aspect, this.near, this.far );
-  	gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
-  	const eye = entity.position;
-  	const at = add(eye, entity.getHeading());
-  	const up = entity.up || vec3(0.0, 0.0, 1.0); // vesen
-  	
-  	mv = mult(mv, rotateZ(this.entityToFollow.yaw));
-  	mv = mult(mv, rotateX(this.entityToFollow.pitch));
-  	
-  	mv = mult( mv, lookAt( eye, at, up ));
-  	
   }
   
   configureFollowingView(){
+    let eye = add(this.entityToFollow.position, negate(scale(0.8, this.entityToFollow.headingVector)));
+    eye = add(eye, scale(0.5, this.entityToFollow.upVector));
+    const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
+    const up = this.entityToFollow.upVector;
+    mv = mult(mv, lookAt(eye, at, up));
   }
   
   configureStationaryView(){

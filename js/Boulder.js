@@ -35,7 +35,7 @@ class Boulder extends Entity {
     mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
     mv = mult(mv, rotate(this.pitch, [1, 0, 0]));
     mv = mult(mv, rotate(this.yaw, [0, 1, 0]));
-    this.cube.draw(1);
+    this.cube.draw();
     //this.cube.draw(0, 0, 0, 1);
     mv=Utils.mvStack.pop();
   }

@@ -25,6 +25,7 @@ class Ship extends Entity {
     this.shipShape = new ShipShape(this.color);
 
     this.bullets = [];
+    this.cube = new Cube("bullet");
   }
   
   initializeVariables(){
@@ -43,11 +44,10 @@ class Ship extends Entity {
   }
   
   move(du){
-    console.log('Moving ship', du);
-    debugger
+    //console.log('Moving ship', du);
     const velocity = scale(du, this.getVelocity());
     this.position = vec3(add(this.position, velocity));
-    console.log(this.position, this.speed, velocity);
+    //console.log(this.position, this.speed, velocity);
   }
   
   reset(){
@@ -167,23 +167,21 @@ class Ship extends Entity {
   
   render(){
     Utils.mvStack.push(mv);
-    //const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
     
     mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
-
-    //mv = mult(mv, rotate(-this.yaw, shipYAxis));
-    //mv = mult(mv, rotate(this.pitch));
 
     const rotMat = transpose(mat4(vec4(this.crossVector, 0),
                                   vec4(this.upVector, 0),
                                   vec4(this.headingVector, 0)));
     mv = mult(mv, rotMat);
-    const shipScale = 0.05;
+    const shipScale = 0.1;
     mv = mult(mv, scalem(shipScale, shipScale, shipScale));
     
     this.shipShape.draw();
     
     mv=Utils.mvStack.pop();
+
+    this.renderBullets();
   }
   
   renderBullets(){
@@ -196,8 +194,10 @@ class Ship extends Entity {
     mv = mult(mv, rotateX(360 * Math.random()));
     mv = mult(mv, rotateY(360 * Math.random()));
     mv = mult(mv, rotateZ(360 * Math.random()));
-    mv = mult(mv, scalem(0.1, 0.1, 0.1));
-    this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
+    const bulletScale = 0.02;
+    mv = mult(mv, scalem(bulletScale, bulletScale, bulletScale));
+    this.cube.draw();
+    //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
     //console.log("rendering bullet ", bullet);
     mv=Utils.mvStack.pop();
   }
