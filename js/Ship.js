@@ -43,14 +43,15 @@ class Ship extends Entity {
   }
   
   move(du){
-    //console.log('Moving ship', du);
+    console.log('Moving ship', du);
+    debugger
     const velocity = scale(du, this.getVelocity());
     this.position = vec3(add(this.position, velocity));
-    //console.log(this.position, this.speed, velocity);
+    console.log(this.position, this.speed, velocity);
   }
   
   reset(){
-    this.speed = 0;
+    this.speed = 0.000;
     this.position = vec3(0.0, 0.0, 0.0);
 
     this.headingVector = vec3(0.0, 0.0, 1.0);
@@ -65,7 +66,7 @@ class Ship extends Entity {
     } else {
       this.bullets.push({
         position: this.position,
-        velocity: scale(Math.max(0.05, this.speed), this.getHeading())
+        velocity: scale(Math.max(0.05, this.speed), this.headingVector)
       }); 
     }
   }
@@ -101,11 +102,11 @@ class Ship extends Entity {
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
-      this.changePitch(this.pitchRate);
+      this.changePitch(-this.pitchRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
-      this.changePitch(-this.pitchRate);
+      this.changePitch(+this.pitchRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
@@ -117,11 +118,11 @@ class Ship extends Entity {
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
-      this.changeRoll(-this.rollRate);
+      this.changeRoll(this.rollRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
-      this.changeRoll(this.rollRate);
+      this.changeRoll(-this.rollRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
@@ -168,7 +169,8 @@ class Ship extends Entity {
     Utils.mvStack.push(mv);
     //const shipYAxis = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)];
     
-    //mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+
     //mv = mult(mv, rotate(-this.yaw, shipYAxis));
     //mv = mult(mv, rotate(this.pitch));
 

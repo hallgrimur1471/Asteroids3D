@@ -11,58 +11,58 @@ class ShipShape {
     this.centerOfRotation = 0.0;
 
     this.vertices = [
-      vec3( 0.0,  this.height, -this.concave + this.centerOfRotation),
-      vec3( this.width,  0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, -this.height, -this.concave + this.centerOfRotation),
+      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
+      vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
 
-      vec3( 0.0,  this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0, -this.height, -this.concave + this.centerOfRotation),
-      vec3(-this.width,  0.0,  this.height + this.centerOfRotation),
+      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
+      vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
 
 
-      vec3(-this.width,  0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0,  this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0,  0.0, -this.noseLength + this.centerOfRotation),
+      vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
 
-      vec3( this.width,  0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0,  this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0,  0.0, -this.noseLength + this.centerOfRotation),
+      vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
 
-      vec3(-this.width,  0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, -this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0,  0.0, -this.noseLength + this.centerOfRotation),
+      vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
 
-      vec3( this.width,  0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, -this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0,  0.0, -this.noseLength + this.centerOfRotation),
+      vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0,  0.0, this.noseLength - this.centerOfRotation),
     ];
 
     this.lineVertices = [
-      vec3(-this.width, 0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0, this.height, -this.concave + this.centerOfRotation),
-      vec3( this.width, 0.0,  this.height + this.centerOfRotation),
-      vec3( this.width, 0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0,-this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0,-this.height, -this.concave + this.centerOfRotation),
-      vec3(-this.width, 0.0,  this.height + this.centerOfRotation),
+      vec3(-this.width, 0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0, this.height, +this.concave - this.centerOfRotation),
+      vec3( this.width, 0.0,  -this.height - this.centerOfRotation),
+      vec3( this.width, 0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0,-this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0,-this.height, +this.concave - this.centerOfRotation),
+      vec3(-this.width, 0.0,  -this.height - this.centerOfRotation),
 
-//      vec3( 0.0, this.height, -this.concave + this.centerOfRotation),
-//      vec3( 0.0,-this.height, -this.concave + this.centerOfRotation),
+//      vec3( 0.0, this.height, +this.concave - this.centerOfRotation),
+//      vec3( 0.0,-this.height, +this.concave - this.centerOfRotation),
 
-      vec3(-this.width, 0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, 0.0, -this.noseLength + this.centerOfRotation),
+      vec3(-this.width, 0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, 0.0, +this.noseLength - this.centerOfRotation),
 
-      vec3( this.width, 0.0,  this.height + this.centerOfRotation),
-      vec3( 0.0, 0.0, -this.noseLength + this.centerOfRotation),
+      vec3( this.width, 0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, 0.0, +this.noseLength - this.centerOfRotation),
 
-      vec3( 0.0, this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0, 0.0, -this.noseLength + this.centerOfRotation),
+      vec3( 0.0, this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0, 0.0, this.noseLength - this.centerOfRotation),
 
-      vec3( 0.0,-this.height, -this.concave + this.centerOfRotation),
-      vec3( 0.0, 0.0, -this.noseLength + this.centerOfRotation),
+      vec3( 0.0,-this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0, 0.0, this.noseLength - this.centerOfRotation),
 //
-//      vec3( 0.0, 0.0, -this.noseLength + this.centerOfRotation),
+//      vec3( 0.0, 0.0, -this.noseLength - this.centerOfRotation),
 //      vec3( )
     ];
 
