@@ -3,7 +3,7 @@
 /* global Entity, EntityManager, vec3, rotate, mv, Utils, mult, Cube, translate, add */
 
 class Boulder extends Entity {
-  constructor(shipConfig){ //todo: remove shipConfig ?
+  constructor() {
     super("Boulder");
     
     this.position = new vec3(5*(Math.random()-0.5), 5*(Math.random()-0.5), 5*(Math.random()-0.5));
@@ -13,7 +13,8 @@ class Boulder extends Entity {
     this.pitchSpin = Math.random() * 2 - 1;
     this.yawSpin = Math.random() * 2 - 1;
     
-    this.cube = new Cube("boulder");
+    this.boulderColor = vec4(0.0, 1.0, 1.0, 1.0);
+    this.cube = new Cube(this.boulderColor);
 
     this.scale = 0.2;
   }

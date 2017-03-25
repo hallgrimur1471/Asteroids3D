@@ -1,8 +1,8 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
 class Cube {
-  constructor(){
-  	this.image = [];
+  constructor(color){
+    this.color = color;
   	this.vertices = [
   		vec3( -0.5, -0.5,  0.5 ),
       vec3( -0.5,  0.5,  0.5 ),
@@ -55,7 +55,7 @@ class Cube {
 	draw() {
     Utils.mvStack.push(mv);
     mv = mult(mv, scalem(2.0, 2.0, 2.0))
-		Utils.draw(this.vBuffer, vec4(0.0, 0.999, 1.0, 1.0), this.points.length);
+		Utils.draw(this.vBuffer, this.color, this.points.length);
     Utils.drawLines(this.lBuffer, vec4(1.0, 0.0, 0.0, 1.0), this.lineVertices.length);
     Utils.mvStack.pop(mv);
 	}

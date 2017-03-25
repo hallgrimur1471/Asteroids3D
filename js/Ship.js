@@ -25,7 +25,8 @@ class Ship extends Entity {
     this.shipShape = new ShipShape(this.color);
 
     this.bullets = [];
-    this.cube = new Cube("bullet");
+    this.bulletColor = vec4(1.0, 1.0, 0.0, 1.0);
+    this.cube = new Cube(this.bulletColor); // bullet cube
   }
   
   initializeVariables(){
@@ -59,7 +60,7 @@ class Ship extends Entity {
       // dont add bullet, limit reached
     } else {
       this.bullets.push({
-        position: this.position,
+        position: add(this.position, scale(0.8, this.headingVector)),
         velocity: scale(Math.max(0.05, this.speed), this.headingVector)
       }); 
     }
