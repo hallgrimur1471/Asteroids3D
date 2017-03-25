@@ -12,11 +12,25 @@ class EntityManager {
   }
 
   update(du) {
+    const arena = this.arenas['defaultArena'];
+
+    this.handleColissions();
+
     this.forEachArena(arena => arena.update(du));
+  }
+
+  handleColissions() {
+    //const arena = this.arenas['defaultArena'];
+    //const boulders = this.arenas.getBoulders();
+    //const bullets = arena.bullets;
   }
 
   setDefaultArena(arena) {
     this.arenas['defaultArena'] = arena;
+  }
+
+  getArena() {
+    return this.arenas['defaultArena'];
   }
   
   render(ctx) {

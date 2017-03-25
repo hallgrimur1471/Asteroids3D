@@ -3,9 +3,12 @@
 /* global Entity, EntityManager, vec3, Cube, Keyboard, Utils, TexturedCube, mv, mult, translate, rotate, rotateX, scalem, scale, rotateZ, vec4, add */
 
 class Ship extends Entity {
-  constructor(shipConfig){
+  constructor(keyboard, entityManager){
     super("Ship");
-    this.keyboard = shipConfig.keyboard;
+
+    this.entityManager = entityManager;
+
+    this.keyboard = keyboard;
 
     this.speed;
     this.position;
@@ -23,10 +26,6 @@ class Ship extends Entity {
 
     this.color = vec4(0.2, 0.0, 0.0, 1.0);
     this.shipShape = new ShipShape(this.color);
-
-    this.bullets = [];
-    this.bulletColor = vec4(1.0, 1.0, 0.0, 1.0);
-    this.cube = new Cube(this.bulletColor); // bullet cube
   }
   
   initializeVariables(){
@@ -41,7 +40,7 @@ class Ship extends Entity {
   move(du){
     //console.log('Moving ship', du);
     const velocity = scale(du, this.getVelocity());
-    this.position = vec3(add(this.position, velocity));
+    this.position = Utils.stageWrap(vec3(add(this.position, velocity)));
     //console.log(this.position, this.speed, velocity);
   }
   
@@ -59,10 +58,11 @@ class Ship extends Entity {
     if(this.bulletLimitOn && this.bullets.length >= this.bulletLimit) {
       // dont add bullet, limit reached
     } else {
-      this.bullets.push({
-        position: add(this.position, scale(0.8, this.headingVector)),
-        velocity: scale(Math.max(0.05, this.speed), this.headingVector)
-      }); 
+      const bullet = new Bullet(
+        add(this.position, scale(0.88, this.headingVector)),
+        scale(Math.max(0.05, this.speed+(25.0*this.thrustAcceleration)), this.headingVector)
+      );
+      this.entityManager.getArena().addBullet(bullet);
     }
   }
   
@@ -140,16 +140,16 @@ class Ship extends Entity {
     // ...
     // do I do collission detection here? 
     //  nope iirc, the entity manager does that.
-    this.updateBullets(du);
+    //this.updateBullets(du);
   }
   
-  updateBullets(du){
-    this.bullets.forEach(bullet => this.updateBullet(du, bullet));
-  }
+  //updateBullets(du){
+  //  this.bullets.forEach(bullet => this.updateBullet(du, bullet));
+  //}
   
-  updateBullet(du, bullet){
-    bullet.position = vec3(add(bullet.position, scale(du, bullet.velocity)));
-  }
+  //updateBullet(du, bullet){
+  //  bullet.position = vec3(add(bullet.position, scale(du, bullet.velocity)));
+  //}
   
   render(){
     Utils.mvStack.push(mv);
@@ -172,25 +172,23 @@ class Ship extends Entity {
     this.shipShape.draw();
     
     mv=Utils.mvStack.pop();
-
-    this.renderBullets();
   }
   
-  renderBullets(){
-    this.bullets.forEach(bullet => this.renderBullet(bullet));
-  }
+  //renderBullets(){
+  //  this.bullets.forEach(bullet => this.renderBullet(bullet));
+  //}
   
-  renderBullet(bullet){
-    Utils.mvStack.push(mv);
-    mv = mult(mv, translate(bullet.position[0], bullet.position[1], bullet.position[2]));
-    mv = mult(mv, rotateX(360 * Math.random()));
-    mv = mult(mv, rotateY(360 * Math.random()));
-    mv = mult(mv, rotateZ(360 * Math.random()));
-    const bulletScale = 0.02;
-    mv = mult(mv, scalem(bulletScale, bulletScale, bulletScale));
-    this.cube.draw();
-    //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
-    //console.log("rendering bullet ", bullet);
-    mv=Utils.mvStack.pop();
-  }
+  //renderBullet(bullet){
+  //  Utils.mvStack.push(mv);
+  //  mv = mult(mv, translate(bullet.position[0], bullet.position[1], bullet.position[2]));
+  //  mv = mult(mv, rotateX(360 * Math.random()));
+  //  mv = mult(mv, rotateY(360 * Math.random()));
+  //  mv = mult(mv, rotateZ(360 * Math.random()));
+  //  const bulletScale = 0.02;
+  //  mv = mult(mv, scalem(bulletScale, bulletScale, bulletScale));
+  //  this.cube.draw();
+  //  //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
+  //  //console.log("rendering bullet ", bullet);
+  //  mv=Utils.mvStack.pop();
+  //}
 }

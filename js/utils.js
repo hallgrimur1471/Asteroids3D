@@ -77,9 +77,12 @@ const Utils = {
 	},
 	stageWrap: function(position) {
 		let newPosition = position;
-		newPosition[0] = newPosition[0] % (StageCube.SIZE/2);
-		newPosition[1] = newPosition[1] % (StageCube.SIZE/2);
-		newPosition[2] = newPosition[2] % (StageCube.SIZE/2);
+		const b = StageCube.SIZE/2; // position should not exceed this value
+		for (var i = 0; i < 3; i++) {
+			if (Math.abs(position[i])>b) {
+				newPosition[i] = -0.9*position[i];
+			}
+		}
 		return newPosition;
 	},
 }

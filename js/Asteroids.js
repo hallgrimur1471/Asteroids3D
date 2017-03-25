@@ -9,6 +9,8 @@ class Asteroids {
     }
     this.mouse = mouse;
     this.keyboard = keyboard;
+    
+    this.entityManager = new EntityManager();
 
     const ship = this.createShip();
     this.ship = ship;
@@ -16,15 +18,15 @@ class Asteroids {
     this.camera.setEntityToFollow(ship);
     this.camera.setView(Camera.VIEW_STATIONARY);
     
-    this.entityManager = new EntityManager();
     this.createInitialArena();
     this.addCameraEventListeners();
   }
   
   createShip() {
-    const ship = new Ship({
-      keyboard: this.keyboard
-    });
+    const ship = new Ship(
+      this.keyboard,
+      this.entityManager
+    );
     return ship;
   }
   
