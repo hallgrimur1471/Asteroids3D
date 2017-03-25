@@ -1,16 +1,22 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
 class StageCube {
+
+  // The width and height of the stage cube should be the same.
+  static get SIZE() {
+    return 10.0;
+  }
+
   constructor(){
     this.vertices = [
-      vec3( -10.0, -10.0,  10.0 ),
-      vec3( -10.0,  10.0,  10.0 ),
-      vec3(  10.0,  10.0,  10.0 ),
-      vec3(  10.0, -10.0,  10.0 ),
-      vec3( -10.0, -10.0, -10.0 ), 
-      vec3( -10.0,  10.0, -10.0 ),
-      vec3(  10.0,  10.0, -10.0 ),
-      vec3(  10.0, -10.0, -10.0 )
+      vec3( -StageCube.SIZE/2, -StageCube.SIZE/2,  StageCube.SIZE/2 ),
+      vec3( -StageCube.SIZE/2,  StageCube.SIZE/2,  StageCube.SIZE/2 ),
+      vec3(  StageCube.SIZE/2,  StageCube.SIZE/2,  StageCube.SIZE/2 ),
+      vec3(  StageCube.SIZE/2, -StageCube.SIZE/2,  StageCube.SIZE/2 ),
+      vec3( -StageCube.SIZE/2, -StageCube.SIZE/2, -StageCube.SIZE/2 ), 
+      vec3( -StageCube.SIZE/2,  StageCube.SIZE/2, -StageCube.SIZE/2 ),
+      vec3(  StageCube.SIZE/2,  StageCube.SIZE/2, -StageCube.SIZE/2 ),
+      vec3(  StageCube.SIZE/2, -StageCube.SIZE/2, -StageCube.SIZE/2 )
     ];
 
     const v = this.vertices;

@@ -32,12 +32,6 @@ class Ship extends Entity {
     this.reset();
   }
   
-  //getHeading(){
-  //  const rotMat = mult(rotateX(this.pitch), rotateZ(this.yaw));
-  //  const heading = mult(rotMat, vec4(0, 0, 1, 1));
-  //  return vec3(heading);
-  //}
-  
   getVelocity(){
     const velocity = scale(this.speed, this.headingVector);
     return velocity;
@@ -98,11 +92,11 @@ class Ship extends Entity {
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
-      this.changePitch(-this.pitchRate);
+      this.changePitch(+this.pitchRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
-      this.changePitch(+this.pitchRate);
+      this.changePitch(-this.pitchRate);
     }
     
     if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
@@ -171,7 +165,7 @@ class Ship extends Entity {
     );
     mv = mult(mv, rotationMatrix);
 
-    const shipScale = 0.1;
+    const shipScale = 0.2;
     mv = mult(mv, scalem(shipScale, shipScale, shipScale));
     
     this.shipShape.draw();

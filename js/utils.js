@@ -13,7 +13,7 @@ const Utils = {
 	shaderProgram: undefined, // Address of the shader program
 	//textureHandle: undefined, // Address of the texture uniform
 	//usingTexture: undefined, // Address of the usingTexture uniform boolean
-	draw: function(vBuffer, color, numPoints){
+	draw: function(vBuffer, color, numPoints) {
 		
 		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
@@ -23,8 +23,8 @@ const Utils = {
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
 	},
-	drawLines: function(vBuffer, lineColor, numPoints){
-		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
+	drawLines: function(lBuffer, lineColor, numPoints) {
+		gl.bindBuffer( gl.ARRAY_BUFFER, lBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
 
 		gl.uniform4fv( Utils.uniColor, lineColor );
@@ -32,7 +32,7 @@ const Utils = {
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.LINES, 0, numPoints);
 	},
-	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints){
+	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints) {
 			gl.disableVertexAttribArray( Utils.vColor );
 
 			gl.uniform1i( Utils.usingTexture, 0);
@@ -51,7 +51,7 @@ const Utils = {
 			gl.enableVertexAttribArray( Utils.vColor, 4, gl.FLOAT, false, 0, 0 );
 
 	},
-	configureWebGL: function(){
+	configureWebGL: function() {
 		const canvas = document.getElementById( "gl-canvas" );
 		
 		gl = WebGLUtils.setupWebGL( canvas );
@@ -69,15 +69,22 @@ const Utils = {
 		gl.enable(gl.CULL_FACE);
 		gl.cullFace(gl.BACK);
 	},
-	sind: function(deg){
+	sind: function(deg) {
 		return Math.sin(deg*Math.PI/180);
 	},
-	cosd: function(deg){
+	cosd: function(deg) {
 		return Math.cos(deg*Math.PI/180);
-	}
+	},
+	stageWrap: function(position) {
+		let newPosition = position;
+		newPosition[0] = newPosition[0] % (StageCube.SIZE/2);
+		newPosition[1] = newPosition[1] % (StageCube.SIZE/2);
+		newPosition[2] = newPosition[2] % (StageCube.SIZE/2);
+		return newPosition;
+	},
 }
 
-var initUtils = function(){
+var initUtils = function() {
 	// Load shaders
 	Utils.shaderProgram = initShaders( gl, "vertex-shader", "fragment-shader" );
 	gl.useProgram( Utils.shaderProgram );

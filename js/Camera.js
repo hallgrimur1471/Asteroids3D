@@ -28,11 +28,11 @@ class Camera {
     
     // camera rotation and zoom
     this.rotating = false;
-    this.spinY = -10.0;
-    this.spinX = 35.0;
+    this.spinY = -20.0;
+    this.spinX = 30.0;
     this.origX;
     this.origY;
-    this.zoom = -1.0;
+    this.zoom = -20.0;
     this.zoomSensitivity = 1.0;
     this.addMouseListeners(this);
   }
@@ -99,7 +99,7 @@ class Camera {
     }
   }
   configureCockpitView(){
-    let eye = add(this.entityToFollow.position, scale(0.20, this.entityToFollow.headingVector));
+    let eye = add(this.entityToFollow.position, scale(0.59, this.entityToFollow.headingVector));
     //eye = add(eye, scale(0.1, this.entityToFollow.upVector));
     const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
     const up = this.entityToFollow.upVector;
