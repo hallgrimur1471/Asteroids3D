@@ -56,7 +56,7 @@ class Ship extends Entity {
 
     this.headingVector = vec3(0.0, 0.0, 1.0);
     this.upVector = vec3(0.0, 1.0, 0.0);
-    this.crossVector = cross(this.upVector, this.headingVector);
+    this.crossVector = cross(this.headingVector, this.upVector);
     this._isDeadNow = false;
   }
   
@@ -72,28 +72,24 @@ class Ship extends Entity {
   }
   
   changePitch(deg){
-    const rotMat = rotate(deg, this.crossVector);
-    this.updateVectors(rotMat);
-    console.log("Pitch", this.headingVector, this.upVector);
+    const rotationMatrix = rotate(deg, this.crossVector);
+    this.updateVectors(rotationMatrix);
   }
   
   changeYaw(deg){
-    const rotMat = rotate(deg, this.upVector);
-    this.updateVectors(rotMat);
-    console.log("Yaw", this.headingVector);
+    const rotationMatrix = rotate(deg, this.upVector);
+    this.updateVectors(rotationMatrix);
   }
 
   changeRoll(deg){
-    const rotMat = rotate(deg, this.headingVector);
-    this.updateVectors(rotMat);
-    console.log("roll", this.headingVector);
+    const rotationMatrix = rotate(deg, this.headingVector);
+    this.updateVectors(rotationMatrix);
   }
 
-  updateVectors(rotMat) {
-    this.headingVector = vec3(mult(rotMat, vec4(this.headingVector)));
-    this.upVector = vec3(mult(rotMat, vec4(this.upVector)));
-    //this.crossVector = cross(this.headingVector, this.upVector);
-    this.crossVector = cross(this.upVector, this.headingVector);
+  updateVectors(rotationMatrix) {
+    this.headingVector = vec3(mult(rotationMatrix, vec4(this.headingVector)));
+    this.upVector = vec3(mult(rotationMatrix, vec4(this.upVector)));
+    this.crossVector = cross(this.headingVector, this.upVector);
   }
   
   update(du){
@@ -160,20 +156,21 @@ class Ship extends Entity {
     bullet.position = vec3(add(bullet.position, scale(du, bullet.velocity)));
   }
   
-  calculateUpVector(){
-    const up = [0, Utils.cosd(this.pitch), -Utils.sind(this.pitch)]; // This does not make sense, why is x always 0?
-    return up;
-  }
-  
   render(){
     Utils.mvStack.push(mv);
     
-    mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    //mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    mv = mult(mv, translate(this.position));
 
-    const rotMat = transpose(mat4(vec4(this.crossVector, 0),
-                                  vec4(this.upVector, 0),
-                                  vec4(this.headingVector, 0)));
-    mv = mult(mv, rotMat);
+    const rotationMatrix = transpose(
+      mat4(
+        vec4(this.crossVector, 0),
+        vec4(this.upVector, 0),
+        vec4(this.headingVector, 0)
+      )
+    );
+    mv = mult(mv, rotationMatrix);
+
     const shipScale = 0.1;
     mv = mult(mv, scalem(shipScale, shipScale, shipScale));
     
@@ -202,38 +199,3 @@ class Ship extends Entity {
     mv=Utils.mvStack.pop();
   }
 }
-
-//    if(window.ARNAR){
-//      Utils.mvStack.push(mv);
-//      //const upVector = this.calculateUpVector();
-//      
-//      mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
-//      //mv = mult(mv, rotate(-this.yaw, upVector));
-//      //console.info(shipYAxis);
-//      //mv = mult(mv, rotationMatrixFromTwoVectors(this.upVector, this.headingVector));
-//      
-//      mv = mult(mv, scalem(1/3, 1/3, 1/3));
-//      mv = mult(mv, translate(-1.0, -1.0, -1.0));
-//      if(!this.cubeSpecs){
-//        this.texturedCube = new TexturedCube();
-//        this.cubeSpecs = [
-//          { x: 1, y: 0, z: 0, textureName: TexturedCube.TEXTURE_LETTER_B },
-//          { x: 0, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_R },
-//          { x: 1, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_Z },
-//          { x: 2, y: 1, z: 0, textureName: TexturedCube.TEXTURE_LETTER_L },
-//          { x: 1, y: 2, z: 0, textureName: TexturedCube.TEXTURE_LETTER_T },
-//          { x: 1, y: 1, z: 1, textureName: TexturedCube.TEXTURE_LETTER_Z },
-//          { x: 1, y: 1, z: 2, textureName: TexturedCube.TEXTURE_LETTER_Z },
-//        ]
-//      }
-//      this.cubeSpecs.forEach(cubeSpec => {
-//        this.texturedCube.render(cubeSpec.x, cubeSpec.y, cubeSpec.z, cubeSpec.textureName);
-//      });
-//      
-//      //this.texturedCube.render(0, 0, 0, TexturedCube.TEXTURE_LETTER_Z);
-//      mv = Utils.mvStack.pop();
-//      
-//      this.renderBullets();
-//      
-//      this.vector.render(0, 0, window.posx || 5, Vector.TEXTURE_LETTER_L);
-//    } else {

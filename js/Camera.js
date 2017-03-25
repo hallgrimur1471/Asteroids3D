@@ -28,11 +28,11 @@ class Camera {
     
     // camera rotation and zoom
     this.rotating = false;
-    this.spinY = 0.0;
-    this.spinX = 0.0;
+    this.spinY = -10.0;
+    this.spinX = 35.0;
     this.origX;
     this.origY;
-    this.zoom = -40.0;
+    this.zoom = -1.0;
     this.zoomSensitivity = 1.0;
     this.addMouseListeners(this);
   }

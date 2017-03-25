@@ -14,7 +14,7 @@ class Asteroids {
     this.ship = ship;
     this.camera = new Camera(mouse);
     this.camera.setEntityToFollow(ship);
-    this.camera.setView(Camera.VIEW_FOLLOWING);
+    this.camera.setView(Camera.VIEW_STATIONARY);
     
     this.entityManager = new EntityManager();
     this.createInitialArena();

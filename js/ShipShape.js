@@ -12,12 +12,12 @@ class ShipShape {
 
     this.vertices = [
       vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
       vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
-      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
 
       vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
-      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
       vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
 
 
       vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
@@ -25,12 +25,12 @@ class ShipShape {
       vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
 
       vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
-      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
       vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
+      vec3( 0.0,  this.height, +this.concave - this.centerOfRotation),
 
       vec3(-this.width,  0.0,  -this.height - this.centerOfRotation),
-      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
       vec3( 0.0,  0.0, +this.noseLength - this.centerOfRotation),
+      vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
 
       vec3( this.width,  0.0,  -this.height - this.centerOfRotation),
       vec3( 0.0, -this.height, +this.concave - this.centerOfRotation),
