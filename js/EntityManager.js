@@ -14,7 +14,7 @@ class EntityManager {
   update(du) {
     const arena = this.arenas['defaultArena'];
 
-    this.killOldBullets();
+    this.killDistantBullets();
     this.handleColissions();
 
     this.forEachArena(arena => arena.update(du));
@@ -30,7 +30,6 @@ class EntityManager {
         if (this.entitiesColliding(bullet, boulder)) {
           bullet.kill();
           boulder.kill();
-          console.log('Kill boulder!');
         }
       });
     });
@@ -56,8 +55,15 @@ class EntityManager {
     return dSquared < combinedRadii * combinedRadii;
   }
 
-  killOldBullets() {
+  killDistantBullets() {
     const arena = this.arenas['defaultArena'];
+    const bullets = arena.bullets;
+    bullets.forEach(bullet => {
+      if (Utils.maxElement(Utils.abs(bullet.position)) > StageCube.SIZE) {
+        console.info('killing distant bullet');
+        bullet.kill();
+      }
+    });
   }
 
   setDefaultArena(arena) {

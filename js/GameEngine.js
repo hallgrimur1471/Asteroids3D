@@ -76,8 +76,10 @@ class GameEngine {
   }
 
   update(dt) {
-    if (this.shouldSkipUpdate()) return;
-    
+    if (this.shouldSkipUpdate()) {
+      console.log('paused');
+      return;
+    }
     this.processDiagnostics();
 
     // Warn about very large dt values, they may lead to error

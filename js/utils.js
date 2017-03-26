@@ -93,6 +93,18 @@ const Utils = {
 	distanceSquared: function(vector1, vector2) {
 		return Utils.sum(Utils.power(subtract(vector1, vector2), 2));
 	},
+	maxElement: function(vector) {
+		if (vector.length !== 3) {
+			console.error(`Utils.abs only supports vector of length 3`);
+		}
+		return Math.max(vector[0], vector[1], vector[2]);
+	},
+	abs: function(vector) {
+		if (vector.length !== 3) {
+			console.error(`Utils.abs only supports vector of length 3`);
+		}
+		return vec3(Math.abs(vector[0]), Math.abs(vector[1]), Math.abs(vector[2]));
+	},
 	stageWrap: function(position) {
 		let newPosition = position;
 		const b = StageCube.SIZE/2; // position should not exceed this value

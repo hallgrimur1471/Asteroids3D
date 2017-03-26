@@ -132,6 +132,7 @@ class Ship extends Entity {
       }
       
       if (this.keyboard.eatKey(Keyboard.SHIP_SHOOT)) {
+        console.info('adding bullet');
         this.addBullet();
       }
     }

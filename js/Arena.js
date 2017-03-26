@@ -13,7 +13,7 @@ class Arena {
       new Boulder(0.25, 3, this.getRandomPosition()),
       new Boulder(0.25, 3, this.getRandomPosition()),
     ];
-    this.spaceShips = [];
+    this.ufos = []; // unidentified flying objects
     //this.boulders = [
     //  new Boulder(0.25, 3, vec3(0.0, 0.0, 0.0))
     //];
@@ -29,6 +29,8 @@ class Arena {
     this.updateHTMLText();
 
     this.handleKilledEntities();
+
+    this.getEntities().forEach(entity => entity.update(du));
     //this.getEntities().forEach(entity => {
     //  const result = entity.update(du);
     //  if (result === EntityManager.KILL_ME_NOW) {
@@ -77,29 +79,30 @@ class Arena {
   }
 
   handleKilledShip() {
-    if (this.ship.isDead()) {
-      if (this.ship.livesLeft > 1) {
-        this.ship.livesLeft -= 1;
-        const livesLeftText = document.getElementById("livesLeftText");
-        livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
-        this.ship.keyboard.pressPause();
-        this.ship.reset();
-        this.ship.revive();
-      } else {
-        const livesLeftText = document.getElementById("livesLeftText");
-        livesLeftText.textContent = `Game Over`;
-        const bouldersLeftText = document.getElementById("bouldersLeftText");
-        bouldersLeftText.textContent = ``;
-        this.ship.keyboard.pressPause();
-      }
-    }
+    //if (this.ship.isDead()) {
+    //  console.info('ship is dead');
+    //  if (this.ship.livesLeft > 1) {
+    //    this.ship.livesLeft -= 1;
+    //    const livesLeftText = document.getElementById("livesLeftText");
+    //    livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
+    //    this.ship.keyboard.pressPause();
+    //    this.ship.reset();
+    //    this.ship.revive();
+    //  } else {
+    //    const livesLeftText = document.getElementById("livesLeftText");
+    //    livesLeftText.textContent = `Game Over`;
+    //    const bouldersLeftText = document.getElementById("bouldersLeftText");
+    //    bouldersLeftText.textContent = ``;
+    //    this.ship.keyboard.pressPause();
+    //  }
+    //}
   }
   updateHTMLText() {
     const livesLeftText = document.getElementById("livesLeftText");
     livesLeftText.textContent = `You have ${this.ship.livesLeft} lives left`;
 
     const bouldersLeftText = document.getElementById("bouldersLeftText");
-    bouldersLeftText.textContent = `There are ${this.boulders.length} boulders left in the area and ${this.spaceShips.length} spaceships`;
+    bouldersLeftText.textContent = `There are ${this.boulders.length} boulders left in the area and ${this.ufos.length} UFOs`;
   }
   
   render(){
