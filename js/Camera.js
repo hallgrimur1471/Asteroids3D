@@ -32,7 +32,7 @@ class Camera {
     this.spinX = 30.0;
     this.origX;
     this.origY;
-    this.zoom = -2.0;
+    this.zoom = -10.0;
     this.zoomSensitivity = 1.0;
     this.addMouseListeners(this);
   }

@@ -36,6 +36,30 @@ class Keyboard {
     return Keyboard.KEY_MAP.SHIP_ROLL_RIGHT;
   }
   
+  static get SHIP_PITCH_UP_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_PITCH_UP_ALTERNATE;
+  }
+  
+  static get SHIP_PITCH_DOWN_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_PITCH_DOWN_ALTERNATE;
+  }
+  
+  static get SHIP_YAW_LEFT_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_YAW_LEFT_ALTERNATE;
+  }
+  
+  static get SHIP_YAW_RIGHT_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_YAW_RIGHT_ALTERNATE;
+  }
+  
+  static get SHIP_ROLL_LEFT_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_ROLL_LEFT_ALTERNATE;
+  }
+  
+  static get SHIP_ROLL_RIGHT_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_ROLL_RIGHT_ALTERNATE;
+  }
+  
   static get SHIP_SHOOT() {
     return Keyboard.KEY_MAP.SHIP_SHOOT;
   }
@@ -52,6 +76,14 @@ class Keyboard {
     return Keyboard.KEY_MAP.SHIP_BACK;
   }
   
+  static get SHIP_THRUST_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_THRUST_ALTERNATE;
+  }
+  
+  static get SHIP_BACK_ALTERNATE() {
+    return Keyboard.KEY_MAP.SHIP_BACK_ALTERNATE;
+  }
+  
   static get KEY_MAP(){
     return {
       PAUSE: Keyboard.keyCode('P'), 
@@ -60,14 +92,20 @@ class Keyboard {
       TOGGLE_DEBUG_RENDER: Keyboard.keyCode('T'),
     
       SHIP_PITCH_DOWN: Keyboard.keyCode('S'),
+      SHIP_PITCH_DOWN_ALTERNATE: 38, // upArrow
       SHIP_PITCH_UP: Keyboard.keyCode('W'),
+      SHIP_PITCH_UP_ALTERNATE: 40, // downArrow
       SHIP_YAW_LEFT: Keyboard.keyCode('A'),
+      SHIP_YAW_LEFT_ALTERNATE: 37, // leftArrow
       SHIP_YAW_RIGHT: Keyboard.keyCode('D'),
+      SHIP_YAW_RIGHT_ALTERNATE: 39, // rightArrow
       SHIP_ROLL_LEFT: Keyboard.keyCode('Q'),
       SHIP_ROLL_RIGHT: Keyboard.keyCode('E'),
       SHIP_SHOOT: Keyboard.keyCode(' '), // TODO Switch back to space
       SHIP_THRUST: Keyboard.keyCode('J'),
+      SHIP_THRUST_ALTERNATE: 16, // Shift
       SHIP_BACK: Keyboard.keyCode('K'),
+      SHIP_BACK_ALTERNATE: 17, // Ctrl
       
       CHANGE_CAMERA: Keyboard.keyCode('C'),
     };

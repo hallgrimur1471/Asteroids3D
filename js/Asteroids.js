@@ -31,8 +31,9 @@ class Asteroids {
   }
   
   createInitialArena() {
-    this.arena = new Arena(this.ship);
+    this.arena = new Arena(this.ship, this.entityManager);
     this.entityManager.setDefaultArena(this.arena);
+    this.arena.placeInitialBoulders();
   }
   
   addCameraEventListeners() { // Til hvers er þetta fall.

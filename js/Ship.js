@@ -35,7 +35,7 @@ class Ship extends Entity {
 
     this.livesLeft = 3;
 
-    this.usingDebugControls = true;
+    this.usingDebugControls = false;
   }
   
   initializeVariables(){
@@ -116,35 +116,43 @@ class Ship extends Entity {
 
     if (this.usingDebugControls) {
       const controlSensitivity = 0.02;
-      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN) || 
+          this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN_ALTERNATE)) {
         this.position = add(this.position, vec3(0.0, 0.0, -controlSensitivity));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP) ||
+          this.keyboard.isDown(Keyboard.SHIP_PITCH_UP_ALTERNATE)) {
         this.position = add(this.position, vec3(0.0, 0.0, controlSensitivity));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT) ||
+          this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT_ALTERNATE)) {
         this.position = add(this.position, vec3(-controlSensitivity, 0.0, 0.0));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT) ||
+          this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT_ALTERNATE)) {
         this.position = add(this.position, vec3(controlSensitivity, 0.0, 0.0));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT) ||
+          this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT_ALTERNATE)) {
         this.position = add(this.position, vec3(0.0, controlSensitivity, 0.0));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT) ||
+          this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT_ALTERNATE)) {
         this.position = add(this.position, vec3(0.0, -controlSensitivity, 0.0));
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_THRUST) ||
+          this.keyboard.isDown(Keyboard.SHIP_THRUST_ALTERNATE)) {
         this.speed += this.thrustAcceleration;
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_BACK)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_BACK) ||
+          this.keyboard.isDown(Keyboard.SHIP_BACK_ALTERNATE)) {
         this.speed -= this.thrustAcceleration;
       }
       
@@ -154,35 +162,43 @@ class Ship extends Entity {
       }
     }
     else {
-      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN) ||
+          this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN_ALTERNATE)) {
         this.changePitch(+this.pitchRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP) ||
+          this.keyboard.isDown(Keyboard.SHIP_PITCH_UP_ALTERNATE)) {
         this.changePitch(-this.pitchRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT) ||
+          this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT_ALTERNATE)) {
         this.changeYaw(-this.yawRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT) ||
+          this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT_ALTERNATE)) {
         this.changeYaw(this.yawRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT) ||
+          this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT_ALTERNATE)) {
         this.changeRoll(this.rollRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT) ||
+          this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT_ALTERNATE)) {
         this.changeRoll(-this.rollRate);
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_THRUST) ||
+          this.keyboard.isDown(Keyboard.SHIP_THRUST_ALTERNATE)) {
         this.speed += this.thrustAcceleration;
       }
       
-      if (this.keyboard.isDown(Keyboard.SHIP_BACK)) {
+      if (this.keyboard.isDown(Keyboard.SHIP_BACK) ||
+          this.keyboard.isDown(Keyboard.SHIP_BACK_ALTERNATE)) {
         this.speed -= this.thrustAcceleration;
       }
       

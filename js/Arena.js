@@ -3,22 +3,30 @@
 /* global EntityManager, Boulder */
 
 class Arena {
-  constructor(ship) {
+  constructor(ship, entityManager) {
+    this.entityManager = entityManager;
+
     this.ship = ship;
-    this.boulders = [
-      new Boulder(0.25, 3, this.getRandomPosition()),
-      new Boulder(0.25, 3, this.getRandomPosition()),
-      new Boulder(0.25, 3, this.getRandomPosition()),
-      new Boulder(0.25, 3, this.getRandomPosition()),
-      new Boulder(0.25, 3, this.getRandomPosition()),
-      new Boulder(0.25, 3, this.getRandomPosition()),
-    ];
+    this.boulders = [];
     this.ufos = []; // unidentified flying objects
+
     //this.boulders = [
     //  new Boulder(0.25, 3, vec3(0.0, 0.0, 0.0))
     //];
+
     this.bullets = [];
     this.stage = new StageCube();
+  }
+
+  placeInitialBoulders() {
+    const numBoulders = 6;
+    do {
+      console.log('placingInitial boulders');
+      this.boulders = [];
+      for (var i = 0; i < numBoulders; i++) {
+        this.boulders.push(new Boulder(0.25, 3, this.getRandomPosition()));
+      }
+    } while (this.entityManager.shipIsColliding())
   }
 
   addBullet(bullet) {
@@ -79,23 +87,30 @@ class Arena {
   }
 
   handleKilledShip() {
-    //if (this.ship.isDead()) {
-    //  console.info('ship is dead');
-    //  if (this.ship.livesLeft > 1) {
-    //    this.ship.livesLeft -= 1;
-    //    const livesLeftText = document.getElementById("livesLeftText");
-    //    livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
-    //    this.ship.keyboard.pressPause();
-    //    this.ship.reset();
-    //    this.ship.revive();
-    //  } else {
-    //    const livesLeftText = document.getElementById("livesLeftText");
-    //    livesLeftText.textContent = `Game Over`;
-    //    const bouldersLeftText = document.getElementById("bouldersLeftText");
-    //    bouldersLeftText.textContent = ``;
-    //    this.ship.keyboard.pressPause();
-    //  }
-    //}
+    if (this.ship.isDead()) {
+      console.info('ship is dead');
+      if (this.ship.livesLeft > 1) {
+        this.ship.livesLeft -= 1;
+        const livesLeftText = document.getElementById("livesLeftText");
+        livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        document.getElementById("bouldersLeftText").textContent = ``;
+        this.ship.keyboard.pressPause();
+        this.ship.reset();
+
+        // Move boulders if colission on ship reset
+        while (this.entityManager.shipIsColliding()) {
+          this.boulders.forEach(boulder => boulder.move());
+        }
+
+        this.ship.revive();
+      } else {
+        const livesLeftText = document.getElementById("livesLeftText");
+        livesLeftText.textContent = `Game Over`;
+        const bouldersLeftText = document.getElementById("bouldersLeftText");
+        bouldersLeftText.textContent = ``;
+        this.ship.keyboard.pressPause();
+      }
+    }
   }
   updateHTMLText() {
     const livesLeftText = document.getElementById("livesLeftText");
