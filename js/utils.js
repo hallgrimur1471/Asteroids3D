@@ -5,16 +5,18 @@ let mv = mat4();
 const Utils = {
 	mvStack: [],
 	vPosition: undefined, // Address of the vPosition attribute
-	//vColor: undefined, // Address of the vColor attribute
-	//vTexCoord: undefined, // Address of the vColor attribute
+	vColor: undefined, // Address of the vColor attribute
+	vTexCoord: undefined, // Address of the vColor attribute
 	uniColor: undefined, // Address of the uniColor uniform
 	mvLoc: undefined, // Address of the mvLoc uniform
 	proLoc: undefined, // Address of the proLoc uniform
 	shaderProgram: undefined, // Address of the shader program
-	//textureHandle: undefined, // Address of the texture uniform
-	//usingTexture: undefined, // Address of the usingTexture uniform boolean
+	textureHandle: undefined, // Address of the texture uniform
+	usingTexture: undefined, // Address of the usingTexture uniform boolean
 	draw: function(vBuffer, color, numPoints) {
-		
+		gl.uniform1i( Utils.usingTexture, 0);
+		gl.disableVertexAttribArray( Utils.vTexCoord );
+
 		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
 
@@ -24,6 +26,9 @@ const Utils = {
 		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
 	},
 	drawLines: function(lBuffer, lineColor, numPoints) {
+		gl.uniform1i( Utils.usingTexture, 0);
+		gl.disableVertexAttribArray( Utils.vTexCoord );
+
 		gl.bindBuffer( gl.ARRAY_BUFFER, lBuffer );
 		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
 
@@ -32,23 +37,25 @@ const Utils = {
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.LINES, 0, numPoints);
 	},
-	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints) {
-			gl.disableVertexAttribArray( Utils.vColor );
+	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints) { 
+		gl.disableVertexAttribArray( Utils.vColor );
+		gl.enableVertexAttribArray( Utils.vTexCoord );
+		//gl.enableVertexAttribArray( Utils.vColor );
 
-			gl.uniform1i( Utils.usingTexture, 0);
-			
-			gl.bindTexture( gl.TEXTURE_2D, texture );
-			gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
-			gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
-			
-			gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer);
-			gl.vertexAttribPointer( Utils.vTexCoord, 2, gl.FLOAT, false, 0, 0 );
-			
-			gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
-			gl.drawArrays( gl.TRIANGLES, 0, numPoints );
-			
-			
-			gl.enableVertexAttribArray( Utils.vColor, 4, gl.FLOAT, false, 0, 0 );
+		gl.uniform1i( Utils.usingTexture, 0);
+		
+		gl.bindTexture( gl.TEXTURE_2D, texture );
+		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
+		gl.vertexAttribPointer( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
+		
+		gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer);
+		gl.vertexAttribPointer( Utils.vTexCoord, 2, gl.FLOAT, false, 0, 0 );
+		
+		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
+		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
+		
+		
+		//gl.enableVertexAttribArray( Utils.vColor, 4, gl.FLOAT, false, 0, 0 );
 
 	},
 	configureWebGL: function() {
@@ -122,12 +129,18 @@ var initUtils = function() {
 	Utils.shaderProgram = initShaders( gl, "vertex-shader", "fragment-shader" );
 	gl.useProgram( Utils.shaderProgram );
 	
-	// Configure attributes and uniforms
+	// Configure attributes
 	Utils.vPosition = gl.getAttribLocation( Utils.shaderProgram, "vPosition" );
-	//gl.enableVertexAttribArray( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
 	gl.enableVertexAttribArray( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
+	Utils.vColor = gl.getAttribLocation( Utils.shaderProgram, "vColor" );
+	gl.enableVertexAttribArray( Utils.vColor, 4, gl.Float, false, 0, 0 );
+	Utils.vTexCoord = gl.getAttribLocation( Utils.shaderProgram, "vTexCoord" );
+	gl.enableVertexAttribArray( Utils.vTexCoord );
 
-	Utils.uniColor = gl.getUniformLocation( Utils.shaderProgram, "uniColor" );
+	// Configure uniforms
 	Utils.proLoc = gl.getUniformLocation( Utils.shaderProgram, "projection" );
 	Utils.mvLoc = gl.getUniformLocation( Utils.shaderProgram, "modelview" );
+	Utils.uniColor = gl.getUniformLocation( Utils.shaderProgram, "uniColor" );
+	Utils.usingTexture = gl.getUniformLocation( Utils.shaderProgram, "usingTexture" );
+	Utils.texture = gl.getUniformLocation( Utils.shaderProgram, "texture" );
 }

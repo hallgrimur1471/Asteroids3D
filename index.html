@@ -1,7 +1,7 @@
 <html>
 
 <!-- avoid requesting favicon.ico -->
-<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 
 <!-- disable page scrolling -->
 <style type="text/css">
@@ -14,24 +14,42 @@ html, body {
 
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute vec4 vPosition;
+attribute vec2 vTexCoord;
+attribute vec4 vColor;
+
+varying vec2 fTexCoord;
+varying vec4 fColor;
 
 uniform mat4 projection;
 uniform mat4 modelview;
 
 void main() 
 {
-    gl_Position = projection * modelview * vPosition;
+  fColor = vColor;
+  fTexCoord = vTexCoord;
+  gl_Position = projection * modelview * vPosition;
 } 
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
+
+varying vec2 fTexCoord;
  
 uniform vec4 uniColor;
+uniform int usingTexture;
+uniform sampler2D texture;
 
 void main()
 {
-  gl_FragColor = uniColor;
+  vec4 color;
+  if (usingTexture == 1) {
+    color = texture2D(texture, fTexCoord);
+  }
+  else {
+    color = uniColor;
+  }
+  gl_FragColor = color;
 }
 </script>
 
@@ -75,10 +93,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 
 
 <img id="texture-letter-b" src="./images/letter-b.png" hidden="">
-<img id="texture-letter-l" src="./images/letter-l.png" hidden="">
-<img id="texture-letter-r" src="./images/letter-r.png" hidden="">
-<img id="texture-letter-t" src="./images/letter-t.png" hidden="">
-<img id="texture-letter-z" src="./images/letter-z.png" hidden="">
+<img id="texture-space" src="./images/space.jpg" hidden="">
 
 <br/>
 
@@ -86,8 +101,8 @@ Oops ... your browser doesn't support the HTML5 canvas element
 <p id="bouldersLeftText">There are 4 boulders left in the area</p>
 
 </br>
-<p>Primary controls: [Pitch and Yaw: WASD], [Roll: QE], [Shoot: Space], [Thrust: J], [Reverse: K]</p>
-<p>Alternate controls: [Pitch and Yaw: Arrow keys], [Roll: QE], [Shoot: Space], [Thrust: Shift], [Reverse: Ctrl]</p>
+<p>Primary controls: [Pitch and Yaw: WASD], [Roll: QE], [Shoot: Space], [Thrust: J], [Reverse: K], [Change camera: C]</p>
+<p>Alternate controls: [Pitch and Yaw: Arrow keys], [Roll: QE], [Shoot: Space], [Thrust: Shift], [Reverse: Ctrl], [Change camera: C]</p>
 
 
 </body>
