@@ -3,10 +3,14 @@
 class TexturedCube {
 
   static get BOULDER_TEXTURE() {
-    return "metal";
+    return "texture-asteroid";
   }
 
-  constructor(texture){
+  static get UFO_TEXTURE() {
+    return "texture-ufo";
+  }
+
+  constructor(imageName){
     this.vBuffer;
     this.vPoints = [];
     this.vertices = [
@@ -27,11 +31,12 @@ class TexturedCube {
       v[4], v[5], v[5], v[6], v[6], v[7], v[7], v[4],
       v[0], v[4], v[1], v[5], v[2], v[6], v[3], v[7]
     ];
-    this.lineColor = vec4(0.0, 1.0, 0.0, 1.0);
+    this.lineColor = vec4(0.0, 0.0, 0.0, 1.0);
     
     this.tBuffer;
     this.tPoints = [];
     this.texture;
+    this.imageName = imageName;
 
     this.init();
   }
@@ -75,19 +80,18 @@ class TexturedCube {
     this.texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    const image = document.getElementById(StageCube.TEXTURE);
+    const image = document.getElementById(this.imageName);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.generateMipmap(gl.TEXTURE_2D);
-    gl.bindTexture(gl.Texture_2D, null);
+    //gl.bindTexture(gl.Texture_2D, null);
   }
 
   render() {
     Utils.mvStack.push(mv);
-    mv = mult(mv, scalem(-1.0, -1.0, -1.0));
     Utils.drawWithTexture(this.vBuffer, this.tBuffer, this.texture, this.vPoints.length);
-    mv = Utils.mvStack.pop();
     Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
+    mv = Utils.mvStack.pop();
   }
 }

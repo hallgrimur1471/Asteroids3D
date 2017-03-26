@@ -85,7 +85,7 @@ class StageCube {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.generateMipmap(gl.TEXTURE_2D);
-    gl.bindTexture(gl.Texture_2D, null);
+    //gl.bindTexture(gl.Texture_2D, null);
   }
 
   render() {

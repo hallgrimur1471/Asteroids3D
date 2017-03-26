@@ -38,7 +38,7 @@ const Utils = {
 		gl.drawArrays( gl.LINES, 0, numPoints);
 	},
 	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints) { 
-		gl.disableVertexAttribArray( Utils.vColor );
+		//gl.disableVertexAttribArray( Utils.vColor );
 		gl.enableVertexAttribArray( Utils.vTexCoord );
 		//gl.enableVertexAttribArray( Utils.vColor );
 
@@ -112,11 +112,11 @@ const Utils = {
 		}
 		return vec3(Math.abs(vector[0]), Math.abs(vector[1]), Math.abs(vector[2]));
 	},
-	stageWrap: function(position) {
+	stageWrap: function(position, buffer) {
 		let newPosition = position;
 		const b = StageCube.SIZE/2; // position should not exceed this value
 		for (var i = 0; i < 3; i++) {
-			if (Math.abs(position[i])>b) {
+			if (Math.abs(position[i])>b+buffer) {
 				newPosition[i] = -0.9*position[i];
 			}
 		}
@@ -132,8 +132,8 @@ var initUtils = function() {
 	// Configure attributes
 	Utils.vPosition = gl.getAttribLocation( Utils.shaderProgram, "vPosition" );
 	gl.enableVertexAttribArray( Utils.vPosition, 3, gl.FLOAT, false, 0, 0 );
-	Utils.vColor = gl.getAttribLocation( Utils.shaderProgram, "vColor" );
-	gl.enableVertexAttribArray( Utils.vColor, 4, gl.Float, false, 0, 0 );
+	//Utils.vColor = gl.getAttribLocation( Utils.shaderProgram, "vColor" );
+	//gl.enableVertexAttribArray( Utils.vColor, 4, gl.Float, false, 0, 0 );
 	Utils.vTexCoord = gl.getAttribLocation( Utils.shaderProgram, "vTexCoord" );
 	gl.enableVertexAttribArray( Utils.vTexCoord );
 

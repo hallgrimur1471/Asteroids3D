@@ -9,7 +9,7 @@ class Boulder extends Entity {
     this.maxLives = 3;
     this.livesLeft = livesLeft;
 
-    this.position = position;    
+    this.position = position;
     this.velocity = scale(0.5, vec3((Math.random()-0.5)/100, (Math.random()-0.5)/100, (Math.random()-0.5)/100));
     this.velocity = scale(Math.pow(2, this.maxLives-this.livesLeft), this.velocity);
     //this.velocity = vec3(0.0, 0.0, 0.0);
@@ -22,14 +22,14 @@ class Boulder extends Entity {
     //this.yawSpin = 0;
 
     
-    this.boulderColor = vec4(0.0, 1.0, 1.0, 1.0);
-    this.cube = new Cube(this.boulderColor);
+    //this.boulderColor = vec4(0.0, 1.0, 1.0, 1.0);
+    this.cube = new TexturedCube(TexturedCube.BOULDER_TEXTURE);
 
     this.scale = 0.2/Math.pow(2, this.maxLives-this.livesLeft);
   }
   
   move(){
-    this.position = Utils.stageWrap(add(this.position, this.velocity));
+    this.position = Utils.stageWrap(add(this.position, this.velocity), 0.5);
   }
   
   update(du){
@@ -37,7 +37,6 @@ class Boulder extends Entity {
       return EntityManager.KILL_ME_NOW;
     }
 
-    //console.log("velocity", this.speed);
     this.yaw += this.yawSpin/2 % Math.PI;
     this.pitch += this.pitchSpin/2 % Math.PI;
     this.move();
@@ -45,11 +44,11 @@ class Boulder extends Entity {
   
   render(){
     Utils.mvStack.push(mv);
-    mv = mult(mv, translate(this.position[0], this.position[1], this.position[2]));
+    mv = mult(mv, translate(this.position));
     mv = mult(mv, rotate(this.pitch, [1, 0, 0]));
     mv = mult(mv, rotate(this.yaw, [0, 1, 0]));
     mv = mult(mv, scalem(this.scale, this.scale, this.scale));
-    this.cube.draw();
+    this.cube.render();
     //this.cube.draw(0, 0, 0, 1);
     mv=Utils.mvStack.pop();
   }

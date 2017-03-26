@@ -14,6 +14,7 @@ class Entity {
     this.alive = true;
     this.position = position;
     this.radius = radius;
+    this.reasonOfDeath;
   }
 
   isAlive() {

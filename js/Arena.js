@@ -9,12 +9,14 @@ class Arena {
     this.ship = ship;
     this.boulders = [];
     this.ufos = []; // unidentified flying objects
+    this.chancesOfUfo = 0.0;
 
     //this.boulders = [
     //  new Boulder(0.25, 3, vec3(0.0, 0.0, 0.0))
     //];
 
     this.bullets = [];
+    this.ufoBullets = [];
     this.stage = new StageCube();
   }
 
@@ -29,12 +31,25 @@ class Arena {
     } while (this.entityManager.shipIsColliding())
   }
 
+  addUfo() {
+    const radius = 0.25;
+    const position = this.getRandomEdgePosition();
+    const entityToFollow = this.ship;
+    this.ufos.push(new Ufo(radius, position, entityToFollow, this.entityManager));
+  }
+
+  addUfoBullet(bullet) {
+    this.ufoBullets.push(bullet);
+  }
+
   addBullet(bullet) {
     this.bullets.push(bullet);
   }
   
   update(du) {
     this.updateHTMLText();
+
+    this.maybeAddUfo();
 
     this.handleKilledEntities();
 
@@ -48,8 +63,21 @@ class Arena {
 
   }
 
+  maybeAddUfo() {
+    this.chancesOfUfo += 1.0/(this.ufos.length+1);
+    const rnd = 1000 + Math.floor(100000*Math.random());
+    //console.log(this.chancesOfUfo, rnd);
+    if (this.chancesOfUfo > rnd) {
+      console.log('Adding a UFO!');
+      this.chancesOfUfo = 0.0;
+      this.addUfo();
+    }
+  }
+
   handleKilledEntities() {
     this.bullets = this.bullets.filter(bullet => bullet.isAlive());
+    this.ufoBullets = this.ufoBullets.filter(bullet => bullet.isAlive());
+    this.ufos = this.ufos.filter(ufo => ufo.isAlive());
     this.handleKilledBoulders();
     this.handleKilledShip();
   }
@@ -117,14 +145,33 @@ class Arena {
       if (this.ship.livesLeft > 1) {
         this.ship.livesLeft -= 1;
         const livesLeftText = document.getElementById("livesLeftText");
-        livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        if (this.ship.reasonOfDeath === "boulder") {
+          livesLeftText.textContent = `You have hit a boulder! You have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        }
+        else if (this.ship.reasonOfDeath === "ufo-collision") {
+          livesLeftText.textContent = `You have hit a UFO! You have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        }
+        else if (this.ship.reasonOfDeath === "ufo-bullet") {
+          livesLeftText.textContent = `You have been shot by a UFO! You have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        }
         document.getElementById("bouldersLeftText").textContent = ``;
+
+        this.ufoBullets.forEach(bullet => bullet.kill());
+        this.ufoBullets = this.ufoBullets.filter(bullet => bullet.isAlive());
+
         this.ship.keyboard.pressPause();
         this.ship.reset();
 
         // Move boulders if colission on ship reset
         while (this.entityManager.shipIsColliding()) {
           this.boulders.forEach(boulder => boulder.move());
+          this.ufos.forEach(ufo => {
+            ufo.position[2] = StageCube.SIZE/2;
+            ufo.update();
+          });
+          this.ufoBullets.forEach(bullet => {
+            bullet.kill();
+          });
         }
 
         this.ship.revive();
@@ -137,6 +184,7 @@ class Arena {
       }
     }
   }
+
   updateHTMLText() {
     const livesLeftText = document.getElementById("livesLeftText");
     livesLeftText.textContent = `You have ${this.ship.livesLeft} lives left`;
@@ -154,10 +202,34 @@ class Arena {
   }
 
   getEntities() {
-    return [this.ship, ...this.boulders, ...this.bullets];
+    return [this.ship, ...this.bullets, ...this.boulders, ...this.ufos, ...this.ufoBullets];
   }
 
   getRandomPosition() {
     return vec3(5*(Math.random()-0.5), 5*(Math.random()-0.5), 5*(Math.random()-0.5));
+  }
+
+  getRandomEdgePosition() {
+    const min = 0;
+    const max = 2;
+    let rnd = Math.floor(Math.random() * (max-min) + min);
+
+    let N = StageCube.SIZE/2;
+    if (Math.random() > 0.5) {
+      N = -N;
+    }
+
+    let rndVec;
+    if (rnd === 0) {
+      rndVec = vec3(N, 5*(Math.random()-0.5), 5*(Math.random()-0.5));
+    }
+    else if (rnd === 1) {
+      rndVec = vec3(5*(Math.random()-0.5), N, 5*(Math.random()-0.5));
+    }
+    else {
+      rndVec = vec3(5*(Math.random()-0.5), 5*(Math.random()-0.5), N);
+    }
+
+    return rndVec;
   }
 }

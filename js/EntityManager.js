@@ -25,6 +25,7 @@ class EntityManager {
 
     const boulders = arena.boulders;
     const bullets = arena.bullets;
+    const ufos = arena.ufos;
     bullets.forEach(bullet => {
       boulders.forEach(boulder => {
         if (this.entitiesColliding(bullet, boulder)) {
@@ -32,6 +33,12 @@ class EntityManager {
           boulder.kill();
         }
       });
+      ufos.forEach(ufo => {
+        if (this.entitiesColliding(bullet, ufo)) {
+          bullet.kill();
+          ufo.kill();
+        }
+      })
     });
 
     if (this.shipIsColliding()) {
@@ -59,9 +66,26 @@ class EntityManager {
     boulders.forEach(boulder => {
       if (this.entitiesColliding(ship, boulder)) {
         console.log('Ship and boulder colliding!');
+        arena.ship.reasonOfDeath = "boulder";
         foundColission = true;
       }
     });
+    const ufos = arena.ufos;
+    ufos.forEach(ufo => {
+      if (this.entitiesColliding(ship, ufo)) {
+        console.log('Ship and Ufo colliding!');
+        arena.ship.reasonOfDeath = "ufo-collision";
+        foundColission = true;
+      }
+    })
+    const ufoBullets = arena.ufoBullets;
+    ufoBullets.forEach(bullet => {
+      if (this.entitiesColliding(ship, bullet)) {
+        console.log('The ship has been shot by a UFO bullet!');
+        arena.ship.reasonOfDeath = "ufo-bullet";
+        foundColission = true;
+      }
+    })
     return foundColission;
   }
 
@@ -73,6 +97,12 @@ class EntityManager {
         bullet.kill();
       }
     });
+    const ufoBullets = arena.ufoBullets;
+    ufoBullets.forEach(bullet => {
+      if (Utils.maxElement(Utils.abs(bullet.position)) > StageCube.SIZE/2) {
+        bullet.kill();
+      }
+    })
   }
 
   setDefaultArena(arena) {

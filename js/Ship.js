@@ -19,9 +19,10 @@ class Ship extends Entity {
 
     this.keyboard = keyboard;
 
-    this.pitchRate = 0.5;
-    this.yawRate = 0.5;
-    this.rollRate = 0.5;
+    const steeringSensitivity = 0.8;
+    this.pitchRate = steeringSensitivity;
+    this.yawRate = steeringSensitivity;
+    this.rollRate = steeringSensitivity;
     this.thrustAcceleration = 0.001;
     this.deceleration = 1-0.005;//1-0.005;
 
@@ -50,7 +51,7 @@ class Ship extends Entity {
   move(du){
     //console.log('Moving ship', du);
     const velocity = scale(du, this.getVelocity());
-    this.position = Utils.stageWrap(vec3(add(this.position, velocity)));
+    this.position = Utils.stageWrap(vec3(add(this.position, velocity)), -0.8);
     //console.log(this.position, this.speed, velocity);
   }
   
