@@ -42,7 +42,7 @@ const Utils = {
 		gl.enableVertexAttribArray( Utils.vTexCoord );
 		//gl.enableVertexAttribArray( Utils.vColor );
 
-		gl.uniform1i( Utils.usingTexture, 0);
+		gl.uniform1i( Utils.usingTexture, 1);
 		
 		gl.bindTexture( gl.TEXTURE_2D, texture );
 		gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );

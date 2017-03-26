@@ -1,118 +1,93 @@
 /* global vec3, vec2, gl, flatten, Utils, mv, mult, scale4, translate */
 
 class TexturedCube {
-  static get TEXTURE_LETTER_B(){
-		return "texture-letter-b";
-	}
-	
-	static get TEXTURE_LETTER_L(){
-		return "texture-letter-l";
-	}
-	
-  static get TEXTURE_LETTER_R(){
-		return "texture-letter-r";
-	}
-	
-  static get TEXTURE_LETTER_T(){
-		return "texture-letter-t";
-	}
-	
-  static get TEXTURE_LETTER_Z(){
-		return "texture-letter-z";
-	}
-	
-  constructor(){
-  	this.vertices = [
-  		vec3( -0.5, -0.5,  0.5 ),
-      vec3( -0.5,  0.5,  0.5 ),
-      vec3(  0.5,  0.5,  0.5 ),
-      vec3(  0.5, -0.5,  0.5 ),
-      vec3( -0.5, -0.5, -0.5 ),
-      vec3( -0.5,  0.5, -0.5 ),
-      vec3(  0.5,  0.5, -0.5 ),
-      vec3(  0.5, -0.5, -0.5 )
-    ];
-    
-    this.points = [];
-    this.texCoords = [];
+
+  static get BOULDER_TEXTURE() {
+    return "metal";
+  }
+
+  constructor(texture){
     this.vBuffer;
+    this.vPoints = [];
+    this.vertices = [
+      vec3( -1.0, -1.0,  1.0 ),
+      vec3( -1.0,  1.0,  1.0 ),
+      vec3(  1.0,  1.0,  1.0 ),
+      vec3(  1.0, -1.0,  1.0 ),
+      vec3( -1.0, -1.0, -1.0 ), 
+      vec3( -1.0,  1.0, -1.0 ),
+      vec3(  1.0,  1.0, -1.0 ),
+      vec3(  1.0, -1.0, -1.0 )
+    ];
+
+    this.lBuffer;
+    const v = this.vertices;
+    this.lPoints = [
+      v[0], v[1], v[1], v[2], v[2], v[3], v[3], v[0],
+      v[4], v[5], v[5], v[6], v[6], v[7], v[7], v[4],
+      v[0], v[4], v[1], v[5], v[2], v[6], v[3], v[7]
+    ];
+    this.lineColor = vec4(0.0, 1.0, 0.0, 1.0);
+    
     this.tBuffer;
-    this.textureMap = [];
+    this.tPoints = [];
+    this.texture;
+
     this.init();
   }
   
   init() {
-  	this.addQuadToVertices( 1, 0, 3, 2, this.points, this.texCoords);
-    this.addQuadToVertices( 2, 3, 7, 6, this.points, this.texCoords);
-    this.addQuadToVertices( 3, 0, 4, 7, this.points, this.texCoords);
-    this.addQuadToVertices( 6, 5, 1, 2, this.points, this.texCoords);
-    this.addQuadToVertices( 4, 5, 6, 7, this.points, this.texCoords);
-    this.addQuadToVertices( 5, 4, 0, 1, this.points, this.texCoords);
-    
+    this.addQuadToVPoints(1, 0, 3, 2);
+    this.addQuadToVPoints(2, 3, 7, 6);
+    this.addQuadToVPoints(3, 0, 4, 7);
+    this.addQuadToVPoints(6, 5, 1, 2);
+    this.addQuadToVPoints(4, 5, 6, 7);
+    this.addQuadToVPoints(5, 4, 0, 1);
+
     this.vBuffer = gl.createBuffer();
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.vBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, flatten(this.points), gl.STATIC_DRAW );
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.vBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(this.vPoints), gl.STATIC_DRAW );
+
+    this.lBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.lBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(this.lPoints), gl.STATIC_DRAW );
 
     this.tBuffer = gl.createBuffer();
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.tBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, flatten(this.texCoords), gl.STATIC_DRAW );
+    gl.bindBuffer( gl.ARRAY_BUFFER, this.tBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(this.tPoints), gl.STATIC_DRAW );
 
-		const availableTextures = [
-			TexturedCube.TEXTURE_LETTER_B,
-			TexturedCube.TEXTURE_LETTER_L,
-			TexturedCube.TEXTURE_LETTER_R,
-			TexturedCube.TEXTURE_LETTER_T,
-			TexturedCube.TEXTURE_LETTER_Z,
-		];
-		
-		availableTextures.forEach(textureName => {
-			const image = document.getElementById(textureName);
-			this.configureTexture(image, textureName);
-		});
-
-  	//this.configureTexture(this.image[0], 0);
-  	//this.configureTexture(this.image[1], 1);
-  	//this.configureTexture(this.image[2], 2);
-  	//this.configureTexture(this.image[3], 3);
-  	//this.configureTexture(this.image[4], 4);
-  	//this.configureTexture(this.image[5], 5);
-  	//this.configureTexture(this.image[6], 6);
-  	//this.configureTexture(this.image[7], 7);
-
+    this.configureTexture();
   }
 
-  addQuadToVertices(a, b, c, d, points, texcoords){
-  	const texCo = [ vec2(0, 0), vec2(0, 1),  vec2(1, 1), vec2(1, 0) ];
-  	
+  addQuadToVPoints(a, b, c, d) {
+    const texCoordinate = [ vec2(0, 0), vec2(0, 1),  vec2(1, 1), vec2(1, 0) ];
+    
     const indices = [ a, b, c, a, c, d ];
     const texind  = [ 1, 0, 3, 1, 3, 2 ];
 
     for ( let i = 0; i < indices.length; ++i ) {
-        points.push( this.vertices[indices[i]] );
-        texcoords.push( texCo[texind[i]] );
+      this.vPoints.push( this.vertices[indices[i]] );
+      this.tPoints.push( texCoordinate[texind[i]] );
     }
-  }	
+  }
 
-  configureTexture( image , textureName ) {
-    this.textureMap[textureName] = gl.createTexture();
-    gl.bindTexture( gl.TEXTURE_2D, this.textureMap[textureName] );
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
-    gl.generateMipmap( gl.TEXTURE_2D );
-    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
-    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
-	}
+  configureTexture() {
+    this.texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    const image = document.getElementById(StageCube.TEXTURE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR );
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.bindTexture(gl.Texture_2D, null);
+  }
 
-  render(x, y, z, textureName, scale){
-		if (textureName === undefined) console.error("No texture specified for texture cube.");
-		if (scale === undefined) scale = 1.0;
-		
-  	Utils.mvStack.push(mv);
-  	
-  	mv = mult(mv, translate(x,y,z));
-  	mv = mult(mv, scale4(scale, scale, scale));
-  	Utils.drawWithTexture(this.vBuffer, this.tBuffer, this.textureMap[textureName] , this.points.length);
-  	
-  	mv = Utils.mvStack.pop();
+  render() {
+    Utils.mvStack.push(mv);
+    mv = mult(mv, scalem(-1.0, -1.0, -1.0));
+    Utils.drawWithTexture(this.vBuffer, this.tBuffer, this.texture, this.vPoints.length);
+    mv = Utils.mvStack.pop();
+    Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
   }
 }

@@ -89,8 +89,10 @@ class StageCube {
   }
 
   render() {
-    //debugger;
+    Utils.mvStack.push(mv);
+    mv = mult(mv, scalem(-1.0, -1.0, -1.0));
     Utils.drawWithTexture(this.vBuffer, this.tBuffer, this.texture, this.vPoints.length);
-    //Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
+    mv = Utils.mvStack.pop();
+    Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
   }
 }
