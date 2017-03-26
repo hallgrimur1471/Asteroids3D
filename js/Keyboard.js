@@ -72,6 +72,10 @@ class Keyboard {
       CHANGE_CAMERA: Keyboard.keyCode('C'),
     };
   }
+
+  pressPause() {
+    this.currentlyPressedKeys[Keyboard.PAUSE] = true;
+  }
   
   constructor(){
     this.currentlyPressedKeys = [];

@@ -13,6 +13,10 @@ class Arena {
       new Boulder(0.25, 3, this.getRandomPosition()),
       new Boulder(0.25, 3, this.getRandomPosition()),
     ];
+    this.spaceShips = [];
+    //this.boulders = [
+    //  new Boulder(0.25, 3, vec3(0.0, 0.0, 0.0))
+    //];
     this.bullets = [];
     this.stage = new StageCube();
   }
@@ -22,18 +26,22 @@ class Arena {
   }
   
   update(du) {
+    this.updateHTMLText();
+
     this.handleKilledEntities();
-    this.getEntities().forEach(entity => {
-      const result = entity.update(du);
-      if (result === EntityManager.KILL_ME_NOW) {
-        // todo: handle death entity
-      }
-    });
+    //this.getEntities().forEach(entity => {
+    //  const result = entity.update(du);
+    //  if (result === EntityManager.KILL_ME_NOW) {
+    //    // todo: handle death entity
+    //  }
+    //});
+
   }
 
   handleKilledEntities() {
     this.bullets = this.bullets.filter(bullet => bullet.isAlive());
     this.handleKilledBoulders();
+    this.handleKilledShip();
   }
 
   handleKilledBoulders() {
@@ -66,6 +74,32 @@ class Arena {
     });
 
     this.boulders = [...aliveBoulders, ...newBoulders];
+  }
+
+  handleKilledShip() {
+    if (this.ship.isDead()) {
+      if (this.ship.livesLeft > 1) {
+        this.ship.livesLeft -= 1;
+        const livesLeftText = document.getElementById("livesLeftText");
+        livesLeftText.textContent = `You have hit a boulder, and have ${this.ship.livesLeft} lives left. Press P to resume game`;
+        this.ship.keyboard.pressPause();
+        this.ship.reset();
+        this.ship.revive();
+      } else {
+        const livesLeftText = document.getElementById("livesLeftText");
+        livesLeftText.textContent = `Game Over`;
+        const bouldersLeftText = document.getElementById("bouldersLeftText");
+        bouldersLeftText.textContent = ``;
+        this.ship.keyboard.pressPause();
+      }
+    }
+  }
+  updateHTMLText() {
+    const livesLeftText = document.getElementById("livesLeftText");
+    livesLeftText.textContent = `You have ${this.ship.livesLeft} lives left`;
+
+    const bouldersLeftText = document.getElementById("bouldersLeftText");
+    bouldersLeftText.textContent = `There are ${this.boulders.length} boulders left in the area and ${this.spaceShips.length} spaceships`;
   }
   
   render(){

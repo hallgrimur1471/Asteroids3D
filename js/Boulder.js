@@ -11,14 +11,14 @@ class Boulder extends Entity {
 
     this.position = position;    
     this.velocity = vec3((Math.random()-0.5)/100, (Math.random()-0.5)/100, (Math.random()-0.5)/100);
-    //this.velocity = vec3(0.0, 0.0, 0.0);
+    this.velocity = vec3(0.0, 0.0, 0.0);
 
     this.pitch = Math.random() * Math.PI * 2; // up/down
     this.yaw = Math.random() * Math.PI * 2; // left/right
     this.pitchSpin = Math.random() * 2 - 1;
     this.yawSpin = Math.random() * 2 - 1;
-    //this.pitchSpin = 0;
-    //this.yawSpin = 0;
+    this.pitchSpin = 0;
+    this.yawSpin = 0;
 
     
     this.boulderColor = vec4(0.0, 1.0, 1.0, 1.0);

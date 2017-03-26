@@ -28,6 +28,11 @@ class Entity {
     this.alive = false;
     console.log(`Killing ${this.entityName}`);
   }
+
+  revive() {
+    this.alive = true;
+    console.log(`Revive-ing ${this.entityName}`);
+  }
   
   render(ctx){
     console.log(this.entityName, "render not implemented.");

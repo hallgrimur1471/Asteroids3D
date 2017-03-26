@@ -4,7 +4,7 @@
 
 class Ship extends Entity {
   constructor(keyboard, entityManager){
-    const radius = 3.0;
+    const radius = 0.4;
     const position = vec3(0.0, 0.0, 0.0);
     super("Ship", position, radius);
     
@@ -23,10 +23,14 @@ class Ship extends Entity {
     this.yawRate = 0.5;
     this.rollRate = 0.5;
     this.thrustAcceleration = 0.001;
-    this.deceleration = 1-0.005;
+    this.deceleration = 1-0.1;//1-0.005;
 
     this.color = vec4(0.2, 0.0, 0.0, 1.0);
     this.shipShape = new ShipShape(this.color);
+
+    this.livesLeft = 3;
+
+    this.usingDebugControls = true;
   }
   
   initializeVariables(){
@@ -61,7 +65,7 @@ class Ship extends Entity {
     } else {
       const bullet = new Bullet(
         add(this.position, scale(0.88, this.headingVector)),
-        scale(Math.max(0.05, this.speed+(25.0*this.thrustAcceleration)), this.headingVector)
+        scale(Math.max(0.15, this.speed+(25.0*this.thrustAcceleration)), this.headingVector)
       );
       this.entityManager.getArena().addBullet(bullet);
     }
@@ -92,41 +96,81 @@ class Ship extends Entity {
     if (this._isDeadNow) {
       return EntityManager.KILL_ME_NOW;
     }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
-      this.changePitch(+this.pitchRate);
+
+    if (this.usingDebugControls) {
+      const controlSensitivity = 0.02;
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
+        this.position = add(this.position, vec3(0.0, 0.0, -controlSensitivity));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
+        this.position = add(this.position, vec3(0.0, 0.0, controlSensitivity));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
+        this.position = add(this.position, vec3(-controlSensitivity, 0.0, 0.0));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
+        this.position = add(this.position, vec3(controlSensitivity, 0.0, 0.0));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
+        this.position = add(this.position, vec3(0.0, controlSensitivity, 0.0));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
+        this.position = add(this.position, vec3(0.0, -controlSensitivity, 0.0));
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
+        this.speed += this.thrustAcceleration;
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_BACK)) {
+        this.speed -= this.thrustAcceleration;
+      }
+      
+      if (this.keyboard.eatKey(Keyboard.SHIP_SHOOT)) {
+        this.addBullet();
+      }
     }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
-      this.changePitch(-this.pitchRate);
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
-      this.changeYaw(-this.yawRate);
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
-      this.changeYaw(this.yawRate);
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
-      this.changeRoll(this.rollRate);
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
-      this.changeRoll(-this.rollRate);
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
-      this.speed += this.thrustAcceleration;
-    }
-    
-    if (this.keyboard.isDown(Keyboard.SHIP_BACK)) {
-      this.speed -= this.thrustAcceleration;
-    }
-    
-    if (this.keyboard.eatKey(Keyboard.SHIP_SHOOT)) {
-      this.addBullet();
+    else {
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_DOWN)) {
+        this.changePitch(+this.pitchRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_PITCH_UP)) {
+        this.changePitch(-this.pitchRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_RIGHT)) {
+        this.changeYaw(-this.yawRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_YAW_LEFT)) {
+        this.changeYaw(this.yawRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_RIGHT)) {
+        this.changeRoll(this.rollRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_ROLL_LEFT)) {
+        this.changeRoll(-this.rollRate);
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_THRUST)) {
+        this.speed += this.thrustAcceleration;
+      }
+      
+      if (this.keyboard.isDown(Keyboard.SHIP_BACK)) {
+        this.speed -= this.thrustAcceleration;
+      }
+      
+      if (this.keyboard.eatKey(Keyboard.SHIP_SHOOT)) {
+        this.addBullet();
+      }
     }
     
     
