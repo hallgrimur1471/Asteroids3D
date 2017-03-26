@@ -59,8 +59,7 @@ class EntityManager {
     const arena = this.arenas['defaultArena'];
     const bullets = arena.bullets;
     bullets.forEach(bullet => {
-      if (Utils.maxElement(Utils.abs(bullet.position)) > StageCube.SIZE) {
-        console.info('killing distant bullet');
+      if (Utils.maxElement(Utils.abs(bullet.position)) > StageCube.SIZE/2) {
         bullet.kill();
       }
     });

@@ -26,12 +26,12 @@ class Entity {
 
   kill() {
     this.alive = false;
-    console.log(`Killing ${this.entityName}`);
+    console.log(`Killing ${this.name}`);
   }
 
   revive() {
     this.alive = true;
-    console.log(`Revive-ing ${this.entityName}`);
+    console.log(`Revive-ing ${this.name}`);
   }
   
   render(ctx){
