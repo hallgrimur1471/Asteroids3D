@@ -28,6 +28,11 @@ class Ship extends Entity {
     this.color = vec4(0.2, 0.0, 0.0, 1.0);
     this.shipShape = new ShipShape(this.color);
 
+    this.bulletLimit = 4; // How many bullets can exist in the air?
+    this.bulletTimer = 0; // Time until we can shoot
+    this.bulletTimerResetValue = 10; // Minimum time between shots
+    this.bulletLimitOn = true; // Is the gun jammed?
+
     this.livesLeft = 3;
 
     this.usingDebugControls = true;
@@ -60,7 +65,7 @@ class Ship extends Entity {
   }
   
   addBullet(){
-    if(this.bulletLimitOn && this.bullets.length >= this.bulletLimit) {
+    if(this.bulletLimitOn || this.getBulletsInTheAir() >= this.bulletLimit) {
       // dont add bullet, limit reached
     } else {
       const bullet = new Bullet(
@@ -68,7 +73,14 @@ class Ship extends Entity {
         scale(Math.max(0.15, this.speed+(25.0*this.thrustAcceleration)), this.headingVector)
       );
       this.entityManager.getArena().addBullet(bullet);
+
+      this.bulletTimer = this.bulletTimerResetValue;
+      this.bulletLimitOn = true;
     }
+  }
+
+  getBulletsInTheAir() {
+    return this.entityManager.getArena().bullets.length;
   }
   
   changePitch(deg){
@@ -95,6 +107,11 @@ class Ship extends Entity {
   update(du){
     if (this._isDeadNow) {
       return EntityManager.KILL_ME_NOW;
+    }
+
+    this.bulletTimer -= du;
+    if (this.bulletTimer <= 0) {
+      this.bulletLimitOn = false;
     }
 
     if (this.usingDebugControls) {
