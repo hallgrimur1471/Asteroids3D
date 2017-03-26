@@ -3,8 +3,30 @@
 /* global EntityManager */
 
 class Entity {
-  constructor(entityName){
-    this.entityName = entityName;
+  constructor(entityName, position, radius){
+    if (position === undefined) {
+      console.error(`No position specified for entity ${entityName}`);
+    }
+    if (radius === undefined) {
+      console.error(`No radius specified for entity ${entityName}`);
+    }
+    this.name = entityName;
+    this.alive = true;
+    this.position = position;
+    this.radius = radius;
+  }
+
+  isAlive() {
+    return this.alive;
+  }
+
+  isDead() {
+    return !this.alive;
+  }
+
+  kill() {
+    this.alive = false;
+    console.log(`Killing ${this.entityName}`);
   }
   
   render(ctx){

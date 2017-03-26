@@ -4,25 +4,26 @@
 
 class Ship extends Entity {
   constructor(keyboard, entityManager){
-    super("Ship");
-
-    this.entityManager = entityManager;
-
-    this.keyboard = keyboard;
-
+    const radius = 3.0;
+    const position = vec3(0.0, 0.0, 0.0);
+    super("Ship", position, radius);
+    
     this.speed;
     this.position;
     this.headingVector;
     this.upVector;
     this.crossVector;
-    
-    this.pitchRate = 1.2;
-    this.yawRate = 1.2;
-    this.rollRate = 1.2;
+    this.initializeVariables();
+
+    this.entityManager = entityManager;
+
+    this.keyboard = keyboard;
+
+    this.pitchRate = 0.5;
+    this.yawRate = 0.5;
+    this.rollRate = 0.5;
     this.thrustAcceleration = 0.001;
     this.deceleration = 1-0.005;
-
-    this.initializeVariables();
 
     this.color = vec4(0.2, 0.0, 0.0, 1.0);
     this.shipShape = new ShipShape(this.color);

@@ -1,9 +1,13 @@
 'use strict';
 
-class Bullet {
+class Bullet extends Entity {
   constructor(position, velocity) {
+    const radius = 0.02;
+    super("Bullet", position, radius);
+
     this.position = position;
     this.velocity = velocity;
+
     this.bulletColor = vec4(1.0, 1.0, 0.0, 1.0);
     this.cube = new Cube(this.bulletColor);
   }

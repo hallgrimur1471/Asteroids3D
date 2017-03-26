@@ -3,20 +3,28 @@
 /* global Entity, EntityManager, vec3, rotate, mv, Utils, mult, Cube, translate, add */
 
 class Boulder extends Entity {
-  constructor() {
-    super("Boulder");
-    
-    this.position = new vec3(5*(Math.random()-0.5), 5*(Math.random()-0.5), 5*(Math.random()-0.5));
+  constructor(radius, livesLeft, position) {
+    super("Boulder", position, radius);
+
+    this.maxLives = 3;
+    this.livesLeft = livesLeft;
+
+    this.position = position;    
     this.velocity = vec3((Math.random()-0.5)/100, (Math.random()-0.5)/100, (Math.random()-0.5)/100);
+    //this.velocity = vec3(0.0, 0.0, 0.0);
+
     this.pitch = Math.random() * Math.PI * 2; // up/down
     this.yaw = Math.random() * Math.PI * 2; // left/right
     this.pitchSpin = Math.random() * 2 - 1;
     this.yawSpin = Math.random() * 2 - 1;
+    //this.pitchSpin = 0;
+    //this.yawSpin = 0;
+
     
     this.boulderColor = vec4(0.0, 1.0, 1.0, 1.0);
     this.cube = new Cube(this.boulderColor);
 
-    this.scale = 0.2;
+    this.scale = 0.2/Math.pow(2, this.maxLives-this.livesLeft);
   }
   
   move(du){

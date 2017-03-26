@@ -20,9 +20,23 @@ class EntityManager {
   }
 
   handleColissions() {
-    //const arena = this.arenas['defaultArena'];
-    //const boulders = this.arenas.getBoulders();
-    //const bullets = arena.bullets;
+    const arena = this.arenas['defaultArena'];
+    const boulders = arena.boulders;
+    const bullets = arena.bullets;
+    bullets.forEach(bullet => {
+      boulders.forEach(boulder => {
+        if (this.entitiesColliding(bullet, boulder)) {
+          bullet.kill();
+          boulder.kill();
+        }
+      });
+    });
+  }
+
+  entitiesColliding(e1, e2) {
+    const dSquared = Utils.distanceSquared(e1.position, e2.position);
+    const combinedRadii = e1.radius + e2.radius;
+    return dSquared < combinedRadii * combinedRadii;
   }
 
   setDefaultArena(arena) {

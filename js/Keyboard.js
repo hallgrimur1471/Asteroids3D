@@ -66,8 +66,8 @@ class Keyboard {
       SHIP_ROLL_LEFT: Keyboard.keyCode('Q'),
       SHIP_ROLL_RIGHT: Keyboard.keyCode('E'),
       SHIP_SHOOT: Keyboard.keyCode(' '), // TODO Switch back to space
-      SHIP_THRUST: Keyboard.keyCode('X'),
-      SHIP_BACK: Keyboard.keyCode('Z'),
+      SHIP_THRUST: Keyboard.keyCode('J'),
+      SHIP_BACK: Keyboard.keyCode('K'),
       
       CHANGE_CAMERA: Keyboard.keyCode('C'),
     };

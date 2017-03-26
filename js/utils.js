@@ -75,6 +75,24 @@ const Utils = {
 	cosd: function(deg) {
 		return Math.cos(deg*Math.PI/180);
 	},
+	sum: function(vector) {
+		if (vector.length !== 3) {
+			console.error(`Utils.power only supports vector of length 3`);
+		}
+		return vector[0]+vector[1]+vector[2];
+	},
+	power: function(vector, power) {
+		if (vector.length !== 3) {
+			console.error(`Utils.power only supports vector of length 3`);
+		}
+		const xp = Math.pow(vector[0], power);
+		const yp = Math.pow(vector[1], power);
+		const zp = Math.pow(vector[2], power);
+		return vec3(xp, yp, zp);
+	},
+	distanceSquared: function(vector1, vector2) {
+		return Utils.sum(Utils.power(subtract(vector1, vector2), 2));
+	},
 	stageWrap: function(position) {
 		let newPosition = position;
 		const b = StageCube.SIZE/2; // position should not exceed this value
