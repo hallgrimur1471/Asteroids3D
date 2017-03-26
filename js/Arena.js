@@ -64,7 +64,32 @@ class Arena {
     
     let newBoulders = [];
     deadBoulders.forEach(boulder => {
-      if (boulder.livesLeft > 1) {
+      if (boulder.livesLeft === 2) { // split boulder into 3 boulders
+        const rndVec = normalize(vec3(Math.random(), Math.random(), Math.random()));
+        newBoulders.push(
+          new Boulder(
+            boulder.radius/2,
+            boulder.livesLeft-1,
+            add(boulder.position, scale(boulder.radius, rndVec))
+          )
+        );
+        newBoulders.push(
+          new Boulder(
+            boulder.radius/2,
+            boulder.livesLeft-1,
+            add(boulder.position, scale(-boulder.radius, rndVec))
+          )
+        );
+        const rndVec2 = normalize(vec3(Math.random(), Math.random(), Math.random()));
+        newBoulders.push(
+          new Boulder(
+            boulder.radius/2,
+            boulder.livesLeft-1,
+            add(boulder.position, scale(-boulder.radius, rndVec2))
+          )
+        );
+      }
+      if (boulder.livesLeft > 2) { // split boulder into 2 boulders
         const rndVec = normalize(vec3(Math.random(), Math.random(), Math.random()));
         newBoulders.push(
           new Boulder(

@@ -23,7 +23,7 @@ class Ship extends Entity {
     this.yawRate = 0.5;
     this.rollRate = 0.5;
     this.thrustAcceleration = 0.001;
-    this.deceleration = 1-0.1;//1-0.005;
+    this.deceleration = 1-0.005;//1-0.005;
 
     this.color = vec4(0.2, 0.0, 0.0, 1.0);
     this.shipShape = new ShipShape(this.color);
