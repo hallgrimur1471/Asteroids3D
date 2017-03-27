@@ -16,7 +16,7 @@ class Asteroids {
     this.ship = ship;
     this.camera = new Camera(mouse);
     this.camera.setEntityToFollow(ship);
-    this.camera.setView(Camera.VIEW_STATIONARY);
+    this.camera.setView(Camera.VIEW_STATIONARY_LOOK_AT);
     
     this.createInitialArena();
     this.addCameraEventListeners();
@@ -31,7 +31,7 @@ class Asteroids {
   }
   
   createInitialArena() {
-    this.arena = new Arena(this.ship, this.entityManager);
+    this.arena = new Arena(this.ship, this.entityManager, this.camera, this.gameEngine);
     this.entityManager.setDefaultArena(this.arena);
     this.arena.placeInitialBoulders();
   }

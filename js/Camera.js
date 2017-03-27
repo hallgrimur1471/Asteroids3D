@@ -3,14 +3,17 @@
 /* global Utils, gl, mv, lookAt, mult, vec3, perspective, flatten */
 
 class Camera {
-  static get VIEW_COCKPIT(){
+  static get VIEW_COCKPIT() {
     return "cockpit_view";
   }
-  static get VIEW_FOLLOWING(){
+  static get VIEW_FOLLOWING() {
     return "following_view";
   }
-  static get VIEW_STATIONARY(){
+  static get VIEW_STATIONARY() {
     return "stationary_view";
+  }
+  static get VIEW_STATIONARY_LOOK_AT() {
+    return "stationary_view_look_at"
   }
   constructor(mouse) {
     this.mouse = mouse;
@@ -22,7 +25,7 @@ class Camera {
     
     this.setProjection(this.fovy, this.aspect, this.near, this.far);
     
-    this.views = [Camera.VIEW_COCKPIT, Camera.VIEW_FOLLOWING, Camera.VIEW_STATIONARY];
+    this.views = [Camera.VIEW_FOLLOWING, Camera.VIEW_COCKPIT, Camera.VIEW_STATIONARY, Camera.VIEW_STATIONARY_LOOK_AT];
   
     this.setView(Camera.VIEW_STATIONARY);
     
@@ -32,8 +35,9 @@ class Camera {
     this.spinX = 30.0;
     this.origX;
     this.origY;
-    this.zoom = -20.0;
-    this.zoomSensitivity = 1.0;
+    this.zoom = -20;
+    this.lastZoom = this.zoom;
+    this.zoomSensitivity = 1;
     this.addMouseListeners(this);
   }
 
@@ -64,10 +68,10 @@ class Camera {
     });
 
     this.mouse.addMouseScrollListener(e => {
-      if (e.wheelDelta < 0) {
-        self.zoom -= self.zoomSensitivity;
-      } else {
+      if (e.deltaY < 0) {
         self.zoom += self.zoomSensitivity;
+      } else {
+        self.zoom -= self.zoomSensitivity;
       }
       console.log(`Zoom level set to ${this.zoom}`);
     });
@@ -75,6 +79,14 @@ class Camera {
   
   setView(view){
     console.info(`View set to ${view}`);
+    if (this.currentView != view) {
+      if (view === Camera.VIEW_FOLLOWING) {
+        this.zoom = -5;
+      }
+      else if (view === Camera.VIEW_STATIONARY) {
+        this.zoom = -48;
+      }
+    }
     this.currentView = view;
     this.updateMouseListeners();
   }
@@ -94,11 +106,14 @@ class Camera {
       case Camera.VIEW_STATIONARY:
         this.configureStationaryView();
         break;
+      case Camera.VIEW_STATIONARY_LOOK_AT:
+        this.configureStationaryLookAtView();
+        break;
       default:
         console.error(`View: ${this.currentView} is not a defined view.`);
     }
   }
-  configureCockpitView(){
+  configureCockpitView() {
     let eye = add(this.entityToFollow.position, scale(0.59, this.entityToFollow.headingVector));
     //eye = add(eye, scale(0.1, this.entityToFollow.upVector));
     const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
@@ -107,21 +122,30 @@ class Camera {
     const entity = this.entityToFollow;
   }
   
-  configureFollowingView(){
-    let eye = add(this.entityToFollow.position, negate(scale(0.8, this.entityToFollow.headingVector)));
-    eye = add(eye, scale(0.5, this.entityToFollow.upVector));
+  configureFollowingView() {
+    console.log(`configure following view ${this.zoom}`);
+    let eye = add(this.entityToFollow.position, negate(scale(-this.zoom+0.01, this.entityToFollow.headingVector)));
+    eye = add(eye, scale(2.0, this.entityToFollow.upVector));
     const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
     const up = this.entityToFollow.upVector;
     mv = mult(mv, lookAt(eye, at, up));
   }
   
-  configureStationaryView(){
+  configureStationaryView() {
     const eye =  vec3(0.0, 0.0, this.zoom, 1.0);
   	const at = vec3(0.0, 0.0, this.zoom+0.1, 1.0);
   	const up = vec3(0.0, 1.0, 0.0, 1.0);
   	mv = mult( mv, lookAt( eye, at, up ));
 
     mv = mult( mv, mult( rotateX(this.spinX), rotateY(this.spinY)));
+  }
+
+  configureStationaryLookAtView() {
+    const cornerPos = StageCube.SIZE/2;
+    const eye = vec3(cornerPos, cornerPos, cornerPos);
+    const at = vec3(this.entityToFollow.position);
+    const up = vec3(0.0, 1.0, 0.0);
+    mv = mult(mv, lookAt(eye, at, up));
   }
   
   nextView() {
@@ -132,26 +156,20 @@ class Camera {
     this.setView(nextView);
   }
   
-  zoom(event) {
-    if (event.deltaY < 0) {
-      this.zoom += this.zoomSensitivity;
-    } else {
-      this.zoom -= this.zoomSensitivity;
-    }
-    console.log(`Zoom level set to ${this.zoom}`);
-  }
-  
   updateMouseListeners() {
     switch (this.currentView) {
       case Camera.VIEW_COCKPIT:
         this.mouse.removeMouseScrollListener(this.zoom);
         break;
       case Camera.VIEW_FOLLOWING:
-        this.mouse.removeMouseScrollListener(this.zoom);
+        this.mouse.addMouseScrollListener(this.zoom);
         break;
       case Camera.VIEW_STATIONARY:
         this.mouse.addMouseScrollListener(this.zoom);
         break;
+      case Camera.VIEW_STATIONARY_LOOK_AT:
+        this.mouse.addMouseScrollListener(this.zoom);
+        break
       default:
         console.error("cannot update camera mouse listeners because " +
                       this.currentView, "is not defined.");

@@ -38,9 +38,7 @@ const Utils = {
 		gl.drawArrays( gl.LINES, 0, numPoints);
 	},
 	drawWithTexture: function(vBuffer, tBuffer, texture, numPoints) { 
-		//gl.disableVertexAttribArray( Utils.vColor );
 		gl.enableVertexAttribArray( Utils.vTexCoord );
-		//gl.enableVertexAttribArray( Utils.vColor );
 
 		gl.uniform1i( Utils.usingTexture, 1);
 		
@@ -53,10 +51,6 @@ const Utils = {
 		
 		gl.uniformMatrix4fv(Utils.mvLoc, false, flatten(mv));
 		gl.drawArrays( gl.TRIANGLES, 0, numPoints );
-		
-		
-		//gl.enableVertexAttribArray( Utils.vColor, 4, gl.FLOAT, false, 0, 0 );
-
 	},
 	configureWebGL: function() {
 		const canvas = document.getElementById( "gl-canvas" );
@@ -65,7 +59,6 @@ const Utils = {
 		if ( !gl ) { alert( "WebGL isn't available" ); }
 
 		gl.viewport( 0, 0, canvas.width, canvas.height );
-		//gl.clearColor( 256/256, 256/256, 256/256, 1.0 );
 		gl.clearColor( 0/256, 0/256, 0/256, 1.0 );
 		
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -117,7 +110,7 @@ const Utils = {
 		const b = StageCube.SIZE/2; // position should not exceed this value
 		for (var i = 0; i < 3; i++) {
 			if (Math.abs(position[i])>b+buffer) {
-				newPosition[i] = -0.9*position[i];
+				newPosition[i] = -0.99*position[i];
 			}
 		}
 		return newPosition;

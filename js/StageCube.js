@@ -4,7 +4,7 @@ class StageCube {
 
   // The width and height of the stage cube should be the same.
   static get SIZE() {
-    return 10.0;
+    return 25.0;
   }
 
   static get TEXTURE() {
@@ -93,6 +93,6 @@ class StageCube {
     mv = mult(mv, scalem(-1.0, -1.0, -1.0));
     Utils.drawWithTexture(this.vBuffer, this.tBuffer, this.texture, this.vPoints.length);
     mv = Utils.mvStack.pop();
-    Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
+    //Utils.drawLines(this.lBuffer, this.lineColor, this.lPoints.length);
   }
 }

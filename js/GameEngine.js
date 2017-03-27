@@ -97,9 +97,19 @@ class GameEngine {
 
   shouldSkipUpdate() {
     if (this.keyboard.eatKey(Keyboard.KEY_MAP.PAUSE)) {
+      console.log(`this.isPaused: ${this.isPaused}`);
       this.isPaused = !this.isPaused;
+      if (!this.isPaused && this.game.arena.ship.livesLeft > 0 && this.game.arena.ship.isDead()) {
+        this.game.arena.reset();
+        this.game.camera.zoom = -5;
+      }
     }
-    return this.isPaused && !this.keyboard.eatKey(Keyboard.KEY_MAP.STEP);
+    if (this.game.arena.ship.livesLeft <= 0) {
+      return true;
+    }
+    else {
+      return this.isPaused && !this.keyboard.eatKey(Keyboard.KEY_MAP.STEP);
+    }
   }
   
   processDiagnostics() {

@@ -3,12 +3,14 @@
 /* global EntityManager, Boulder */
 
 class Arena {
-  constructor(ship, entityManager) {
+  constructor(ship, entityManager, camera) {
     this.entityManager = entityManager;
+    this.camera = camera;
 
     this.ship = ship;
     this.boulders = [];
     this.ufos = []; // unidentified flying objects
+    this.addUfo();
     this.chancesOfUfo = 0.0;
 
     //this.boulders = [
@@ -21,7 +23,7 @@ class Arena {
   }
 
   placeInitialBoulders() {
-    const numBoulders = 6;
+    const numBoulders = 4;
     do {
       console.log('placingInitial boulders');
       this.boulders = [];
@@ -142,8 +144,11 @@ class Arena {
   handleKilledShip() {
     if (this.ship.isDead()) {
       console.info('ship is dead');
-      if (this.ship.livesLeft > 1) {
-        this.ship.livesLeft -= 1;
+      this.camera.setView(Camera.VIEW_FOLLOWING);
+      this.camera.zoom = 7;
+      this.ship.livesLeft -= 1;
+      console.log(`SHIP LIVES LEFT: ${this.ship.livesLeft}`);
+      if (this.ship.livesLeft > 0) {
         const livesLeftText = document.getElementById("livesLeftText");
         if (this.ship.reasonOfDeath === "boulder") {
           livesLeftText.textContent = `You have hit a boulder! You have ${this.ship.livesLeft} lives left. Press P to resume game`;
@@ -160,21 +165,6 @@ class Arena {
         this.ufoBullets = this.ufoBullets.filter(bullet => bullet.isAlive());
 
         this.ship.keyboard.pressPause();
-        this.ship.reset();
-
-        // Move boulders if colission on ship reset
-        while (this.entityManager.shipIsColliding()) {
-          this.boulders.forEach(boulder => boulder.move());
-          this.ufos.forEach(ufo => {
-            ufo.position[2] = StageCube.SIZE/2;
-            ufo.update();
-          });
-          this.ufoBullets.forEach(bullet => {
-            bullet.kill();
-          });
-        }
-
-        this.ship.revive();
       } else {
         const livesLeftText = document.getElementById("livesLeftText");
         livesLeftText.textContent = `Game Over`;
@@ -183,6 +173,24 @@ class Arena {
         this.ship.keyboard.pressPause();
       }
     }
+  }
+
+  reset() {
+    this.ship.reset();
+
+    // Move boulders if colission on ship reset
+    while (this.entityManager.shipIsColliding()) {
+      this.boulders.forEach(boulder => boulder.move());
+      this.ufos.forEach(ufo => {
+        ufo.position[2] = StageCube.SIZE/2;
+        ufo.update();
+      });
+      this.ufoBullets.forEach(bullet => {
+        bullet.kill();
+      });
+    }
+
+    this.ship.revive();
   }
 
   updateHTMLText() {
