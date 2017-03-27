@@ -77,7 +77,6 @@ class GameEngine {
 
   update(dt) {
     if (this.shouldSkipUpdate()) {
-      console.log('paused');
       return;
     }
     this.processDiagnostics();
@@ -97,7 +96,6 @@ class GameEngine {
 
   shouldSkipUpdate() {
     if (this.keyboard.eatKey(Keyboard.KEY_MAP.PAUSE)) {
-      console.log(`this.isPaused: ${this.isPaused}`);
       this.isPaused = !this.isPaused;
       if (!this.isPaused && this.game.arena.ship.livesLeft > 0 && this.game.arena.ship.isDead()) {
         this.game.arena.reset();
@@ -105,6 +103,13 @@ class GameEngine {
       }
     }
     if (this.game.arena.ship.livesLeft <= 0) {
+      return true;
+    }
+    else if(this.game.arena.boulders.length + this.game.arena.ufos.length === 0) {
+      const livesLeftText = document.getElementById("livesLeftText");
+      livesLeftText.textContent = `Congratsulations! You have won the game.`;
+      const bouldersLeftText = document.getElementById("bouldersLeftText");
+      bouldersLeftText.textContent = `https://youtu.be/WNmCm4oyrkY`;
       return true;
     }
     else {

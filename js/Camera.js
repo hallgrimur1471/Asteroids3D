@@ -123,7 +123,6 @@ class Camera {
   }
   
   configureFollowingView() {
-    console.log(`configure following view ${this.zoom}`);
     let eye = add(this.entityToFollow.position, negate(scale(-this.zoom+0.01, this.entityToFollow.headingVector)));
     eye = add(eye, scale(2.0, this.entityToFollow.upVector));
     const at = add(this.entityToFollow.position, this.entityToFollow.headingVector);
