@@ -1,0 +1,24 @@
+{
+  "name": "asteroids-3d",
+  "version": "1.0.0",
+  "description": "Asteroids game in 3D",
+  "main": "index.html",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hallgrimur1471/asteroids-3d.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Hallgrimur David Egilsson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hallgrimur1471/asteroids-3d/issues"
+  },
+  "homepage": "https://notendur.hi.is/~hde5/tgr/verkefni3/"
+}
