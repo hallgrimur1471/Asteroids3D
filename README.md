@@ -13,14 +13,12 @@ node.js
 npm
 
 ### Installing
-Change to the directory this project was cloned to and
-Install connect and serve-static with NPM:
+Change to the directory this project was cloned to and install connect and serve-static with NPM:
 ```
 npm install connect serve-static
 ```
 ### Running
-While in the directory this project was cloned to
-run server.js with node:
+While in the directory this project was cloned to run server.js with node:
 ```
 node server.js
 ```
