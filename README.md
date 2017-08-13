@@ -9,6 +9,7 @@ The game is available to play at https://notendur.hi.is/~hde5/tgr/verkefni3/
 ### Prerequisities
 
 node.js
+
 npm
 
 ### Installing
