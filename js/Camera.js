@@ -27,7 +27,6 @@ class Camera {
     
     this.views = [Camera.VIEW_FOLLOWING, Camera.VIEW_COCKPIT, Camera.VIEW_STATIONARY, Camera.VIEW_STATIONARY_LOOK_AT];
   
-    this.setView(Camera.VIEW_STATIONARY);
     
     // camera rotation and zoom
     this.rotating = false;
@@ -39,11 +38,22 @@ class Camera {
     this.lastZoom = this.zoom;
     this.zoomSensitivity = 1;
     this.addMouseListeners(this);
+    this.setView(Camera.VIEW_STATIONARY);
   }
 
   setProjection(fovy, aspect, near, far) {
     var proj = perspective( fovy, aspect, near, far );
     gl.uniformMatrix4fv(Utils.proLoc, false, flatten(proj));
+  }
+
+  addMouseScrollListener(self) {
+    this.mouse.addMouseScrollListener(e => {
+      if (e.deltaY < 0) {
+        this.zoom += this.zoomSensitivity;
+      } else {
+        this.zoom -= this.zoomSensitivity;
+      }
+    });
   }
 
   addMouseListeners(self) {
@@ -67,14 +77,7 @@ class Camera {
       this.rotating = false;
     });
 
-    this.mouse.addMouseScrollListener(e => {
-      if (e.deltaY < 0) {
-        self.zoom += self.zoomSensitivity;
-      } else {
-        self.zoom -= self.zoomSensitivity;
-      }
-      console.log(`Zoom level set to ${this.zoom}`);
-    });
+    self.addMouseScrollListener(self);
   }
   
   setView(view){
@@ -158,16 +161,16 @@ class Camera {
   updateMouseListeners() {
     switch (this.currentView) {
       case Camera.VIEW_COCKPIT:
-        this.mouse.removeMouseScrollListener(this.zoom);
+        //this.removeMouseScrollListener(this.scrollHandler);
         break;
       case Camera.VIEW_FOLLOWING:
-        this.mouse.addMouseScrollListener(this.zoom);
+        this.addMouseScrollListener(this);
         break;
       case Camera.VIEW_STATIONARY:
-        this.mouse.addMouseScrollListener(this.zoom);
+        this.addMouseScrollListener(this);
         break;
       case Camera.VIEW_STATIONARY_LOOK_AT:
-        this.mouse.addMouseScrollListener(this.zoom);
+        this.addMouseScrollListener(this);
         break
       default:
         console.error("cannot update camera mouse listeners because " +
